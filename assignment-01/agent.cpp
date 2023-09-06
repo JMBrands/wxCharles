@@ -6,11 +6,7 @@ void test_agent() {
 }
 
 void string_agent() {
-    while (on_ball()) {  //keeps the program running
-        /* Charles picks up the ball and then moves forward
-        After this, he checks if he's in front of a wall
-        If he is, he turns right to prevent hitting it */
-    while (on_ball()) {  //keeps the program running
+    while (on_ball()) { //keeps the program running
         /* Charles picks up the ball and then moves forward
         After this, he checks if he's in front of a wall
         If he is, he turns right to prevent hitting it */
@@ -36,7 +32,7 @@ void try_get_ball() {
 }
 
 void safe_step() {
-    // Another incredibly useful function. Not necessary for the examples, but useful for some edge-cases
+    // Another incredibly useful function. Not strictly necessary for the examples, but useful for some edge-cases, so still used here
     if (!in_front_of_wall()) {
         step();
     }
@@ -54,6 +50,7 @@ void clear_line_back() {
         step();
     }
     turn_right();
+    step();
 }
 
 void clear_line_double() {
@@ -95,6 +92,7 @@ void clear_line_front() {
 }
 
 void chaos_agent() {
+    
     /* Quite a complicated function, it will first go to the top right corner
     And from there it'll go down one line at a time and pick up balls along the way
     If possible, on the next line it will go back to the east side picking up balls
@@ -110,13 +108,13 @@ void chaos_agent() {
     try_get_ball();
     turn_right();
     step();
-    while(on_ball()) { // Most of the complicated logic is handled in the functions
+    while(on_ball()) { // Most of the complicated logic is handled in the funcitons
         clear_line_front();
     }
     turn_180();
     step();
-    while(on_ball()) {
-        get_ball();
+    while(!in_front_of_wall()) {
+        try_get_ball();
         step();
     }
     turn_left();
@@ -162,4 +160,3 @@ void block_agent() {
     turn_left(); // turn to the northwest corner
     step_to_wall(); // step to the corner
     turn_180(); // face east
-}
