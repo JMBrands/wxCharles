@@ -18,6 +18,12 @@ void string_agent() {
     }
 }
 
+void turn_180() { 
+    // turns 180 degrees by making two right turns
+    turn_right();
+    turn_right();
+}
+
 void try_get_ball() {
     // Saves a lot of repetitive safe-checks
     if (on_ball()) {
@@ -54,7 +60,6 @@ void clear_line_double() {
     which is exactly what this function does: it goes to the end
     and then calls clear_line_back() to clear the line
     */
-    
     turn_right();
     safe_step();
     while (on_ball()) {
@@ -106,8 +111,7 @@ void chaos_agent() {
     while(on_ball()) { // Most of the complicated logic is handled in the funcitons
         clear_line_front();
     }
-    turn_left();
-    turn_left();
+    turn_180();
     step();
     while(!in_front_of_wall()) {
         try_get_ball();
@@ -117,52 +121,42 @@ void chaos_agent() {
     while(!in_front_of_wall()) {
         step();
     }
-    turn_left();
-    turn_left();
+    turn_180();
 }
 
-bool check_wall_right() {
-    // Pretty self-explanatory, checks if there's a wall on the right
-    // Once again, saves a lot of time
-    turn_right();
-    if (in_front_of_wall()) {
-        turn_left();
-        return true;
+/* 
+the code & comments above this were written by Sybren, 
+below this are Jonar's code & comments 
+(we did think about both together, but Jonar had problems with the setup at first) 
+*/
+
+void step_to_wall() { // step to wall
+    while (!in_front_of_wall())
+        step();
+}
+
+void step_to_block_corner() { // step to the corner of the block putting balls on every space along the way
+    while(in_front_of_wall()) {
+        turn_left(); // turn away from wall
+        put_ball();
+        step();
+        turn_right(); // turn to wall for loop check
     }
-    turn_left();
-    return false;
 }
 
 void block_agent() {
-    // Will first navigate to the rectangle using the ball as a guide
-    // After that, it will follow around the rectangle
-    // At the end, it will return to the top left
-    while(!on_ball()) {
+    while (!on_ball()) // step until on ball
         step();
-    }
-    turn_right();
-    while(!in_front_of_wall()) {
+    turn_right(); // face block and step to the block
+    step_to_wall();
+    while (!on_ball()) { // do this until on a ball again
+        step_to_block_corner();
+        put_ball(); // put ball on corner and go around corner
         step();
+        turn_right(); // face wall again for move loop
     }
-    turn_left();
-    while (!on_ball()) {
-        while (check_wall_right())
-        {
-            put_ball();
-            step();
-        }
-        turn_right();
-        put_ball();
-        step();
-    }
-    turn_left();
-    while (!in_front_of_wall()) {
-        step();
-    }
-    turn_left();
-    while (!in_front_of_wall()) {
-        step();
-    }
-    turn_left();
-    turn_left();
-}
+    turn_180(); // turn around to face other wall, charles is facing the block at this point
+    step_to_wall(); // step to the other wall
+    turn_left(); // turn to the northwest corner
+    step_to_wall(); // step to the corner
+    turn_180(); // face east
