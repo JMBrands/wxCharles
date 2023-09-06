@@ -10,6 +10,10 @@ void string_agent() {
         /* Charles picks up the ball and then moves forward
         After this, he checks if he's in front of a wall
         If he is, he turns right to prevent hitting it */
+    while (on_ball()) {  //keeps the program running
+        /* Charles picks up the ball and then moves forward
+        After this, he checks if he's in front of a wall
+        If he is, he turns right to prevent hitting it */
         get_ball(); 
         step();
         if (in_front_of_wall()) {
