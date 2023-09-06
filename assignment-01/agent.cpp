@@ -18,6 +18,11 @@ void string_agent() {
     }
 }
 
+void turn_180() {
+    turn_right();
+    turn_right();
+}
+
 void try_get_ball() {
     // Saves a lot of repetitive safe-checks
     if (on_ball()) {
@@ -27,7 +32,7 @@ void try_get_ball() {
 
 void safe_step() {
     // Another incredibly useful function. Not necessary for the examples, but useful for some edge-cases
-    if (!in_front_of_wall) {
+    if (!in_front_of_wall()) {
         step();
     }
 }
@@ -36,7 +41,7 @@ void clear_line_back() {
     turn_left();
     safe_step();
     while (!in_front_of_wall()) {
-        try_get_ball()
+        try_get_ball();
         step();
     }
     turn_right();
@@ -84,8 +89,7 @@ void chaos_agent() {
     while(on_ball()) {
         clear_line_front();
     }
-    turn_left();
-    turn_left();
+    turn_180();
     step();
     while(on_ball()) {
         get_ball();
@@ -95,10 +99,34 @@ void chaos_agent() {
     while(!in_front_of_wall()) {
         step();
     }
-    turn_left();
-    turn_left();
+    turn_180();
 }
 
-void block_agent() {
+void step_to_wall() { // step to wall
+    while (!in_front_of_wall())
+        step();
+}
 
+
+void block_agent() {
+    while (!on_ball()) // step until on ball
+        step();
+    turn_right();
+    step_to_wall();
+    while (!on_ball()) { // do this until on a ball again
+        while(in_front_of_wall()) {
+            turn_left(); // turn away from wall
+            put_ball();
+            step();
+            turn_right(); // turn to wall for loop check
+        }
+        put_ball(); // put ball on corner and go around corner
+        step();
+        turn_right(); // face wall again for move loop
+    }
+    turn_180();
+    step_to_wall();
+    turn_left();
+    step_to_wall();
+    turn_180();
 }

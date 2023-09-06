@@ -1,152 +1,142 @@
 CMakeFiles/wxCharles.dir/framework/world.cpp.obj: \
- C:\Users\11486\OneDrive\Documenten\@Programming\@C++\wxCharles-demo\assignment-01\framework\world.cpp \
- C:\Users\11486\OneDrive\Documenten\@Programming\@C++\wxCharles-demo\assignment-01\framework\world.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cassert \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/c++config.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/os_defines.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/cpu_defines.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/pstl/pstl_config.h \
- C:/Program\ Files/Msys2/mingw64/include/assert.h \
- C:/Program\ Files/Msys2/mingw64/include/crtdefs.h \
- C:/Program\ Files/Msys2/mingw64/include/corecrt.h \
- C:/Program\ Files/Msys2/mingw64/include/_mingw.h \
- C:/Program\ Files/Msys2/mingw64/include/_mingw_mac.h \
- C:/Program\ Files/Msys2/mingw64/include/_mingw_secapi.h \
- C:/Program\ Files/Msys2/mingw64/include/vadefs.h \
- C:/Program\ Files/Msys2/mingw64/include/sdks/_mingw_ddk.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/stdlib.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cstdlib \
- C:/Program\ Files/Msys2/mingw64/include/stdlib.h \
- C:/Program\ Files/Msys2/mingw64/include/corecrt_wstdlib.h \
- C:/Program\ Files/Msys2/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
- C:/Program\ Files/Msys2/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
- C:/Program\ Files/Msys2/mingw64/include/limits.h \
- C:/Program\ Files/Msys2/mingw64/include/sec_api/stdlib_s.h \
- C:/Program\ Files/Msys2/mingw64/include/malloc.h \
- C:/Program\ Files/Msys2/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
- C:/Program\ Files/Msys2/mingw64/include/errno.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/std_abs.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/vector \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/requires_hosted.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_algobase.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/functexcept.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/exception_defines.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/cpp_type_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ext/type_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ext/numeric_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_pair.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/type_traits \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/move.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/utility.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_iterator_base_types.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_iterator_base_funcs.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/concept_check.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/debug/assertions.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_iterator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/ptr_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/debug/debug.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/predefined_ops.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bit \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/allocator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/c++allocator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/new_allocator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/new \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/exception.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/memoryfwd.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_construct.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_uninitialized.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ext/alloc_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/alloc_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_vector.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/initializer_list \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_bvector.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/functional_hash.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/hash_bytes.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/refwrap.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/invoke.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stl_function.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/backward/binders.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/range_access.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/vector.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/memory_resource.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cstddef \
- C:/Program\ Files/Msys2/mingw64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
- C:/Program\ Files/Msys2/mingw64/include/stddef.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/uses_allocator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/uses_allocator_args.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/tuple \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/iostream \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ostream \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ios \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/iosfwd \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/stringfwd.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/postypes.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cwchar \
- C:/Program\ Files/Msys2/mingw64/include/wchar.h \
- C:/Program\ Files/Msys2/mingw64/include/corecrt_stdio_config.h \
- C:/Program\ Files/Msys2/mingw64/include/_mingw_off_t.h \
- C:/Program\ Files/Msys2/mingw64/include/_mingw_stat64.h \
- C:/Program\ Files/Msys2/mingw64/include/swprintf.inl \
- C:/Program\ Files/Msys2/mingw64/include/sec_api/wchar_s.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/exception \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/exception_ptr.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/cxxabi_init_exception.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/typeinfo \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/nested_exception.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/char_traits.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/localefwd.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/c++locale.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/clocale \
- C:/Program\ Files/Msys2/mingw64/include/locale.h \
- C:/Program\ Files/Msys2/mingw64/include/stdio.h \
- C:/Program\ Files/Msys2/mingw64/include/sec_api/stdio_s.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cctype \
- C:/Program\ Files/Msys2/mingw64/include/ctype.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/ios_base.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ext/atomicity.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/gthr.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/gthr-default.h \
- C:/Program\ Files/Msys2/mingw64/include/pthread.h \
- C:/Program\ Files/Msys2/mingw64/include/sys/types.h \
- C:/Program\ Files/Msys2/mingw64/include/process.h \
- C:/Program\ Files/Msys2/mingw64/include/corecrt_startup.h \
- C:/Program\ Files/Msys2/mingw64/include/signal.h \
- C:/Program\ Files/Msys2/mingw64/include/pthread_signal.h \
- C:/Program\ Files/Msys2/mingw64/include/time.h \
- C:/Program\ Files/Msys2/mingw64/include/sys/timeb.h \
- C:/Program\ Files/Msys2/mingw64/include/sec_api/sys/timeb_s.h \
- C:/Program\ Files/Msys2/mingw64/include/_timeval.h \
- C:/Program\ Files/Msys2/mingw64/include/pthread_time.h \
- C:/Program\ Files/Msys2/mingw64/include/pthread_compat.h \
- C:/Program\ Files/Msys2/mingw64/include/pthread_unistd.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/atomic_word.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/locale_classes.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/string \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/ostream_insert.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/cxxabi_forced.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/basic_string.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/string_view \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/string_view.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/ext/string_conversions.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cstdio \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cerrno \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/charconv.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/basic_string.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/locale_classes.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/system_error \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/error_constants.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/stdexcept \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/streambuf \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/streambuf.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/basic_ios.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/locale_facets.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/cwctype \
- C:/Program\ Files/Msys2/mingw64/include/wctype.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/ctype_base.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/streambuf_iterator.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/x86_64-w64-mingw32/bits/ctype_inline.h \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/locale_facets.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/basic_ios.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/ostream.tcc \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/istream \
- C:/Program\ Files/Msys2/mingw64/include/c++/13.1.0/bits/istream.tcc
+ Z:\charles\charles\assignment-01\framework\world.cpp \
+ Z:\charles\charles\assignment-01\framework\world.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cassert \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h \
+ C:/MinGW/x86_64-w64-mingw32/include/assert.h \
+ C:/MinGW/x86_64-w64-mingw32/include/crtdefs.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_mac.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_secapi.h \
+ C:/MinGW/x86_64-w64-mingw32/include/vadefs.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sdks/_mingw_directx.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/stdlib.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdlib \
+ C:/MinGW/x86_64-w64-mingw32/include/stdlib.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed/limits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed/syslimits.h \
+ C:/MinGW/x86_64-w64-mingw32/include/limits.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+ C:/MinGW/x86_64-w64-mingw32/include/malloc.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/std_abs.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/vector \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_algobase.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/functexcept.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/exception_defines.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/cpp_type_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/type_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/numeric_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_pair.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/move.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/concept_check.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/type_traits \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator_base_types.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator_base_funcs.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/debug/assertions.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_iterator.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ptr_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/debug/debug.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/predefined_ops.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/allocator.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/c++allocator.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/new_allocator.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/new \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/exception \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/exception.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/exception_ptr.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/cxxabi_init_exception.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/stddef.h \
+ C:/MinGW/x86_64-w64-mingw32/include/stddef.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/typeinfo \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/hash_bytes.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/nested_exception.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/memoryfwd.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_construct.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/alloc_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/alloc_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_uninitialized.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/utility \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_relops.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/initializer_list \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_vector.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_bvector.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/functional_hash.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/range_access.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/vector.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/iostream \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ostream \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ios \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/iosfwd \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stringfwd.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/postypes.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cwchar \
+ C:/MinGW/x86_64-w64-mingw32/include/wchar.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_print_push.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_off_t.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_stat64.h \
+ C:/MinGW/x86_64-w64-mingw32/include/swprintf.inl \
+ C:/MinGW/x86_64-w64-mingw32/include/sec_api/wchar_s.h \
+ C:/MinGW/x86_64-w64-mingw32/include/_mingw_print_pop.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/char_traits.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdint \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/stdint.h \
+ C:/MinGW/x86_64-w64-mingw32/include/stdint.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/localefwd.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/c++locale.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/clocale \
+ C:/MinGW/x86_64-w64-mingw32/include/locale.h \
+ C:/MinGW/x86_64-w64-mingw32/include/stdio.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cctype \
+ C:/MinGW/x86_64-w64-mingw32/include/ctype.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ios_base.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/atomicity.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
+ C:/MinGW/x86_64-w64-mingw32/include/pthread.h \
+ C:/MinGW/x86_64-w64-mingw32/include/errno.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sys/types.h \
+ C:/MinGW/x86_64-w64-mingw32/include/process.h \
+ C:/MinGW/x86_64-w64-mingw32/include/corecrt_startup.h \
+ C:/MinGW/x86_64-w64-mingw32/include/signal.h \
+ C:/MinGW/x86_64-w64-mingw32/include/pthread_signal.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sys/timeb.h \
+ C:/MinGW/x86_64-w64-mingw32/include/sec_api/sys/timeb_s.h \
+ C:/MinGW/x86_64-w64-mingw32/include/pthread_compat.h \
+ C:/MinGW/x86_64-w64-mingw32/include/pthread_unistd.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/atomic_word.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_classes.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/string \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ostream_insert.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/cxxabi_forced.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_function.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward/binders.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/string_view \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/limits \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/string_view.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/string_conversions.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cstdio \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cerrno \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_classes.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/system_error \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/stdexcept \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/streambuf \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/streambuf.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_ios.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_facets.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/cwctype \
+ C:/MinGW/x86_64-w64-mingw32/include/wctype.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/ctype_base.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/streambuf_iterator.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32/bits/ctype_inline.h \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/locale_facets.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_ios.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/ostream.tcc \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/istream \
+ C:/MinGW/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/istream.tcc
