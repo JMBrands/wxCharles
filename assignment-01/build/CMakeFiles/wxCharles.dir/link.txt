@@ -1,0 +1,3 @@
+C:\Users\11486\AppData\Local\Programs\ImperativeProgramming\cmake-3.27.4-windows-x86_64\bin\cmake.exe -E rm -f CMakeFiles\wxCharles.dir/objects.a
+C:\PROGRA~1\Msys2\mingw64\bin\ar.exe qc CMakeFiles\wxCharles.dir/objects.a @CMakeFiles\wxCharles.dir\objects1.rsp
+C:\PROGRA~1\Msys2\mingw64\bin\G__~1.EXE -g -mwindows -Wl,--whole-archive CMakeFiles\wxCharles.dir/objects.a -Wl,--no-whole-archive -o wxCharles.exe -Wl,--out-implib,libwxCharles.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\wxCharles.dir\linkLibs.rsp

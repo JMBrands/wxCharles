@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/11486/AppData/Local/Programs/ImperativeProgramming/wxWidgets-3.2.2.1/include/wx/msw/wx.rc
+windows.h
+-
+wx/msw/rcdefs.h
+C:/Users/11486/AppData/Local/Programs/ImperativeProgramming/wxWidgets-3.2.2.1/include/wx/msw/wx/msw/rcdefs.h
+
+C:/Users/11486/AppData/Local/Programs/ImperativeProgramming/wxWidgets-3.2.2.1/lib/gcc_dll/mswu/wx/msw/rcdefs.h
+
+C:/Users/11486/OneDrive/Documenten/@Programming/@C++/wxCharles-demo/assignment-01/framework/res/charles.rc
+wx/msw/wx.rc
+C:/Users/11486/OneDrive/Documenten/@Programming/@C++/wxCharles-demo/assignment-01/framework/res/wx/msw/wx.rc
+

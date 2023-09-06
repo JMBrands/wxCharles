@@ -7,8 +7,8 @@ void test_agent() {
 
 void string_agent() {
     while (on_ball()) {
-        step();
         get_ball();
+        step();
         if (in_front_of_wall()) {
             turn_right();
         }
