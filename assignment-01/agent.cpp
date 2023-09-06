@@ -6,7 +6,13 @@ void test_agent() {
 }
 
 void string_agent() {
-
+    while (on_ball()) {
+        step();
+        get_ball();
+        if (in_front_of_wall()) {
+            turn_right();
+        }
+    }
 }
 
 void chaos_agent() {
