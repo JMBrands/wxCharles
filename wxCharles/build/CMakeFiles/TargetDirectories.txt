@@ -1,0 +1,3 @@
+C:/Users/11486/OneDrive/Documenten/@Programming/@C++/wxCharles-demo/wxCharles/build/CMakeFiles/wxCharles.dir
+C:/Users/11486/OneDrive/Documenten/@Programming/@C++/wxCharles-demo/wxCharles/build/CMakeFiles/edit_cache.dir
+C:/Users/11486/OneDrive/Documenten/@Programming/@C++/wxCharles-demo/wxCharles/build/CMakeFiles/rebuild_cache.dir
