@@ -18,7 +18,7 @@ void string_agent() {
     }
 }
 
-void turn_180() {
+void turn_180() { // turns 180 degrees by making two right turns
     turn_right();
     turn_right();
 }
@@ -107,26 +107,29 @@ void step_to_wall() { // step to wall
         step();
 }
 
+void step_to_block_corner() { // step to the corner of the block putting balls on every space along the way
+    while(in_front_of_wall()) {
+        turn_left(); // turn away from wall
+        put_ball();
+        step();
+        turn_right(); // turn to wall for loop check
+    }
+}
 
 void block_agent() {
     while (!on_ball()) // step until on ball
         step();
-    turn_right();
+    turn_right(); // face block and step to the block
     step_to_wall();
     while (!on_ball()) { // do this until on a ball again
-        while(in_front_of_wall()) {
-            turn_left(); // turn away from wall
-            put_ball();
-            step();
-            turn_right(); // turn to wall for loop check
-        }
+        step_to_block_corner();
         put_ball(); // put ball on corner and go around corner
         step();
         turn_right(); // face wall again for move loop
     }
-    turn_180();
-    step_to_wall();
-    turn_left();
-    step_to_wall();
-    turn_180();
+    turn_180(); // turn around to face other wall, charles is facing the block at this point
+    step_to_wall(); // step to the other wall
+    turn_left(); // turn to the northwest corner
+    step_to_wall(); // step to the corner
+    turn_180(); // face east
 }
