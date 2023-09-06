@@ -160,3 +160,4 @@ void block_agent() {
     turn_left(); // turn to the northwest corner
     step_to_wall(); // step to the corner
     turn_180(); // face east
+}
