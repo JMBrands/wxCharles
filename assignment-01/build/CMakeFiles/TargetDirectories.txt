@@ -1,3 +1,0 @@
-Z:/charles/charles/assignment-01/build/CMakeFiles/wxCharles.dir
-Z:/charles/charles/assignment-01/build/CMakeFiles/edit_cache.dir
-Z:/charles/charles/assignment-01/build/CMakeFiles/rebuild_cache.dir
