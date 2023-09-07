@@ -1,6 +1,9 @@
 #include "framework/charles.h"
 #include "assignments/assignment1.h"
 
+// Written by Sybren Beurze (s1127213)
+// and Jonar Brands (s1120583)
+
 void test_agent()
 {
     // Please ignore this part. It's really funny to watch at max speed
