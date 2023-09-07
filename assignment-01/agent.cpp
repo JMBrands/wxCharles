@@ -6,10 +6,11 @@ void test_agent() {
 }
 
 void string_agent() {
+    /* Charles picks up the ball and then moves forward
+    After this, he checks if he's in front of a wall
+    If he is, he turns right to prevent hitting it 
+    */
     while (on_ball()) { //keeps the program running
-        /* Charles picks up the ball and then moves forward
-        After this, he checks if he's in front of a wall
-        If he is, he turns right to prevent hitting it */
         get_ball(); 
         step();
         if (in_front_of_wall()) {
@@ -32,7 +33,7 @@ void try_get_ball() {
 }
 
 void safe_step() {
-    // Another incredibly useful function. Not strictly necessary for the examples, but useful for some edge-cases, so still used here
+    // Not strictly necessary for the examples given here, but useful for some edge-cases, so still used
     if (!in_front_of_wall()) {
         step();
     }
@@ -45,8 +46,11 @@ void clear_line_back() {
     */
     turn_left();
     safe_step();
-    while (!in_front_of_wall()) {
-        try_get_ball();
+    while (!on_ball()) {
+        step();
+    }
+    while (!in_front_of_wall()) { // Walk back to the east wall while picking up balls
+        get_ball();
         step();
     }
     turn_right();
@@ -62,11 +66,11 @@ void clear_line_double() {
     */
     turn_right();
     safe_step();
-    while (on_ball()) {
+    while (on_ball()) { // Go to the west end of the line
         safe_step();
     }
     turn_left();
-    clear_line_back();
+    clear_line_back(); // Returns Charles to the east wall while picking up balls
 }
 
 void clear_line_front() {
@@ -77,7 +81,7 @@ void clear_line_front() {
     */
     turn_right();
     safe_step();
-    while(on_ball()) {
+    while(on_ball()) { // Clear the line out to the west end
         get_ball();
         safe_step();
     }
@@ -101,27 +105,27 @@ void chaos_agent() {
     After it reaches the east side without finding a ball at the end it will return
     picking up the final line of balls along the way
     */
-    while(!in_front_of_wall()) {
+    while(!in_front_of_wall()) { // Walk to east side, picking up balls along the way
         try_get_ball();
         step();
     }
     try_get_ball();
     turn_right();
     step();
-    while(on_ball()) { // Most of the complicated logic is handled in the funcitons
+    while(on_ball()) { // Most of the complicated logic is handled in the functions
         clear_line_front();
     }
     turn_180();
     step();
-    while(!in_front_of_wall()) {
+    while(!in_front_of_wall()) { // Go back to north-east corner, picking up balls along the way
         try_get_ball();
         step();
     }
     turn_left();
-    while(!in_front_of_wall()) {
+    while(!in_front_of_wall()) { // Go back to the north-west corner
         step();
     }
-    turn_180();
+    turn_180(); // Turn to face east
 }
 
 /* 
