@@ -24,29 +24,46 @@ void step_to_wall() {
         step();
 }
 
+void turn_180() {
+    turn_left();
+    turn_left();
+}
+
+void clean_balls() {
+    while(!in_front_of_wall()) {
+        clean_row();
+        move_to_next_row();
+    }
+}
+
+void move_to_next_row() {
+    turn_left();
+    step_to_wall();
+    turn_left();
+    step();
+}
+
+void clean_row() {
+    turn_left();
+    step_to_ball();
+    turn_right();
+    step();
+    step_to_ball();
+    get_ball();
+    turn_180();
+    step_to_ball();
+    get_ball();
+}
+
+void step_to_start() { 
+    turn_180();
+    step_to_wall();
+    turn_right();
+}
+
 void structure_agent() {
-    while(!in_front_of_wall()) {
-        turn_left();
-        step_to_ball();
-        turn_right();
-        step();
-        step_to_ball();
-        get_ball();
-        turn_left();
-        turn_left();
-        step_to_ball();
-        get_ball();
-        turn_left();
-        step_to_wall();
-        turn_left();
-        step();
-    }
-    turn_right();
-    turn_right();
-    while(!in_front_of_wall()) {
-        step();
-    }
-    turn_right();
+    clean_balls();
+    step_to_start();
 }
 
 void test_agent() {}
