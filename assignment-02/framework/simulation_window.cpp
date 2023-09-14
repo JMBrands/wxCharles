@@ -254,7 +254,7 @@ SimulationFrame::SimulationFrame() : wxFrame(NULL, wxID_ANY, WINDOW_TITLE) {
     // Value labels are not implemented on OSX, and render in an ugly way on Windows.
     sliderStyle |= wxSL_VALUE_LABEL;
 #endif
-    m_slider = new wxSlider(toolbar, ID_PlaybackSpeed, 10, 1, 100, wxDefaultPosition, wxSize(100, -1), sliderStyle);
+    m_slider = new wxSlider(toolbar, ID_PlaybackSpeed, 10, 1, 1000, wxDefaultPosition, wxSize(100, -1), sliderStyle);
     m_slider->SetSize(wxSize(100, -1));
     m_slider->SetToolTip("Actions per second Charles performs");
 
