@@ -63,8 +63,48 @@ Inclusion algorithm:
     |x*x - v| < 0.1
     appr. sqrt(v) = 4.47265625
 
+Newton-Raphson:
+    v = 0
+    x = 1
+    x = 0.5
+    x = 0.25
+    |x*x - v| < 0.1
+    appr. sqrt(v) = 0.25
 
+    v = 1
+    x = 1
+    |x*x - v| < 0.1
+    appr. sqrt(v) = 1
+    
+    v = 0.25
+    x = 1
+    x = 0.625
+    x = 0.5125
+    |x*x - v| < 0.1
+    appr. sqrt(v) = 0.5125
+    
+    v = 25
+    x = 25
+    x = 13
+    x = 7.46154
+    x = 5.40603
+    x = 5.01525
+    x = 5.00002
+    |x*x - v| < 0.1
+    appr. sqrt(25) = 5.00002
 
+    v = 20
+    x = 20
+    x = 10.5
+    x = 6.20238
+    x = 4.71347
+    x = 4.47831
+    |x*x - v| < 0.1
+    appr. sqrt(20) = 4.47831
+
+    As you can see, newton-rhapson only takes roughly 
+    half the steps that inclusion needs. 
+    (the calculations are harder to do manually though, but that's what computers are for)
 */
 
 /********************************************************************
@@ -72,9 +112,10 @@ Inclusion algorithm:
 ********************************************************************/
 void inclusion (double e, double v)
 {
-    float a = 0;
-    float b = max(v, (double) 1);
-    float x = b;
+    double a = 0;
+    double b = max(v, 1.0);
+    double x;
+    int n = 0;
     if ((a*a) == v) {
         cout << "Inclusion square root of " << v << " is " << a << endl;
     }
@@ -84,13 +125,18 @@ void inclusion (double e, double v)
     else {
         do {
             x = (a+b) / 2;
+
+            // cout << "n: " << n << "\ta: " << a << "\tx: " << x << "\tb: " << b << endl;
+            // The assignment didn't specify we could add labels, but can be re-enabled if you want
+            cout << n << "\t" << a << "\t" << x << "\t" << b << endl;
+            
             if (x*x > v) {
                 b = x;
             }
             else {
                 a = x;
             }
-            //cout << "a, b, x: " << a << ' ' << b << ' ' << x << endl << abs((x*x)-v) << endl;
+            n++;
         }
         while (abs((x*x)-v) > e);
         cout << "Inclusion square root of " << v << " is  " << x << " for epsilon " << e << endl;
@@ -102,8 +148,10 @@ void inclusion (double e, double v)
 ********************************************************************/
 void newton_raphson (double e, double v)
 {
-    float x = max(v, (double) 1);
-    while (abs((x*x)-v) > e) {
+    double x = max(v, 1.0);
+    
+    for (int n = 0; abs((x*x)-v) > e; n++) {
+        cout << n << '\t' << x << endl;
         x = x - ((x*x)-v)/(2*x);
     }
     cout << "Newton Raphson square root of " << v << " is " << x << " for epsilon " << e << endl;
@@ -112,8 +160,11 @@ void newton_raphson (double e, double v)
 
 int main ()
 {
-    for (int i = 0; i <= 100; i++) {
-        newton_raphson(0.001,i);
+    for (int i = 0; i <= 50; i++) {
+        // Demonstration of the algorithms
+        inclusion(0.1, i);
+        newton_raphson(0.1, i);
+        cout << endl;
     }
     return 0;
 }
