@@ -119,26 +119,29 @@ void inclusion (double e, double v)
     if ((a*a) == v) {
         cout << "Inclusion square root of " << v << " is " << a << endl;
     }
-    else if ((b*b) == v) {
+    else if ((b*b) == v) { // Test if b is already the square root of v
         cout << "Inclusion square root of " << v << " is " << b << endl;
     }
-    else {
-        do {
-            x = (a+b) / 2;
+    else { // a and b were not the square root of v
+        do { // Run the code, then check if x is close enough to the square root of v,
+             // We used a do-while loop because x gets defined inside the loop
+            x = (a+b) / 2; // take the average of a and b
 
             // cout << "n: " << n << "\ta: " << a << "\tx: " << x << "\tb: " << b << endl;
             // The assignment didn't specify we could add labels, but can be re-enabled if you want
             cout << n << "\t" << a << "\t" << x << "\t" << b << endl;
             
             if (x*x > v) {
-                b = x;
+                b = x; // b is x if x was too high
             }
             else {
-                a = x;
+                a = x; // a is x if x was too low
             }
             n++;
         }
         while (abs((x*x)-v) > e);
+        // The line below runs when the do-while loop above is finished,
+        // This will mean the condition has been met and x squared is within acceptable limits of v
         cout << "Inclusion square root of " << v << " is  " << x << " for epsilon " << e << endl;
     }
 }
@@ -148,11 +151,11 @@ void inclusion (double e, double v)
 ********************************************************************/
 void newton_raphson (double e, double v)
 {
-    double x = max(v, 1.0);
-    
+    float x = max(v, 1.0); // If v is below 1, b will be 1, otherwise b will be v
     for (int n = 0; abs((x*x)-v) > e; n++) {
-        cout << n << '\t' << x << endl;
         x = x - ((x*x)-v)/(2*x);
+        //  This is the formula for x(i+1) rewritten with f(x) and its derivate function already written out
+        // Since we can't use functins with returns yet
     }
     cout << "Newton Raphson square root of " << v << " is " << x << " for epsilon " << e << endl;
 
