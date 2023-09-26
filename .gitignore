@@ -4,6 +4,9 @@
 # Personal vscode configuration
 .vscode
 
+# Personal testing file
+**/test.cpp
+
 # Debug logs
 **.log
 
