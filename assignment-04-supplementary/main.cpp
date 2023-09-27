@@ -40,20 +40,23 @@ int num_days_in_month(Month month, int year) {
     case November:
       return 30;
       break;
+    default:
+      return 0;
+      break;
   }
 }
 
 Weekday first_day_of_year(int year) {
   /* 2007 was chosen as base year since it's our birthyear
   Also it started on a monday
-  This function just calculates the amount of years and leap years in between
+  This function just calculates the amount of years in between
   and based on that it calculates the first day of said year
+  it also counts double for leap years
   */
-  int base_year = 2007; // not necessary, but works nicer
+  int base_year = 2007; // not necessary, but now you're able to modify it
   Weekday base_day = Monday; // also not necessary
   int delta_days;
-  int delta_leapyears;
-  
+
   if (year == base_year) {
     return base_day;
   }
@@ -70,32 +73,48 @@ Weekday first_day_of_year(int year) {
   
 }
 
-Weekday first_day_of_month(int year, Month month) {
-  Weekday first_day_of_year = first_day_of_year(year);
-  Weekday first_day = first_day_of_year;
-  for(int i = 1, i < month, i++) {
-    first_day += num_days_in_month(i);
-    first_day %= 7;
+Weekday first_day_of_month(Month month, int year) {
+  int first_day = first_day_of_year(year);
+  if (month == January) {
+    return static_cast<Weekday> (first_day);
   }
-  return first_day;
+  for(int i = 1; i < month; i++) {
+    first_day += num_days_in_month(static_cast<Month> (i), year) % 7;
+  }
+  first_day %= 7;
+  if (first_day == 0) {
+    first_day = 7;
+  }
+  return static_cast<Weekday> (first_day);
 }
 
 void show_month (Month month, int year)
 {
   // implement this function
 
-  str calendar[35];
-  Weekday i;
-  for (i = Monday, i < first_day_of_month(year, month), i++) {
-    calendar [i] = ""
+  string calendar[42];
+  fill(begin(calendar), end(calendar), "  ");
+  Weekday i = first_day_of_month(month, year);
+  for (int j = 0; j < num_days_in_month(month, year); j++) {
+    if (j < 9) {
+      calendar[i+j-1] = to_string(j+1)+" ";
+    }
+    else {
+      calendar[i+j-1] = to_string(j+1);
+    }
   }
-  int j = 1;
-  for (i, i < first_day_of_month(year, static_cast<Month>(month + 1)), i++) {
-    calendar[i] = as_string(j);
-    j++;
+  cout << month << " " << year << endl;
+  cout << "Mo  Tu  We  Th  Fr  Sa  Su" << endl;
+  for (int j = 0; j < 42; j++) {
+    if (j == 34 && calendar[j+1] == "  ") {
+      cout << endl;
+      break;
+    }
+    cout << calendar[j]+"| ";
+    if ((j+1) % 7 == 0) {
+      cout << endl;
+    }
   }
-
-  cout << "Mo Tu We Th Fr Sa Su" << endl;
 }
 
 void show_months ()
@@ -106,6 +125,13 @@ void show_months ()
 #ifndef TESTING
 int main ()
 {
+  for (int i = 8; i <= 12; i++) {
+    show_month(static_cast<Month> (i), 2007);
+  }
+  for(int i = 1; i <= 12; i++) {
+    show_month(static_cast<Month> (i), 2008);
+  }
+  
   return 0;
 }
 #endif
