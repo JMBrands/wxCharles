@@ -1,5 +1,9 @@
-**/build
-**/build/**
+
+
+# Compiled files
+**/build**
+**/build2**
+
 
 # Personal vscode configuration
 .vscode
