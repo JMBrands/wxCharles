@@ -118,7 +118,3 @@ TEST (part_two, ascension_day)
   EXPECT_EQ (show_ascension_day (12, April, 2020), "21-5");
   EXPECT_EQ (show_ascension_day (4, April, 2021), "13-5");
 }
-
-TEST (part_three, show_holy_days) {
-  EXPECT_EQ (show_holy_days)
-}
