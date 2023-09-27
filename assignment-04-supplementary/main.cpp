@@ -8,45 +8,94 @@ enum Month
   July, August, September, October, November, December
 };
 
-/*  The function easter_base uses the Meeus/Jones/Butcher formula to compute
-    the number that is used to determine on which month (easter_month below)
-    and day (easter_day below) Easter is in the given year.
-*/
-int easter_base (int year)
+enum Weekday
 {
-  const int A = year % 19;
-  const int B = year / 100;
-  const int C = year % 100;
-  const int D = B / 4;
-  const int E = B % 4;
-  const int F = (B + 8) / 25;
-  const int G = (B - F + 1) / 3;
-  const int H = (19 * A + B - D - G + 15) % 30;
-  const int I = C / 4;
-  const int K = C % 4;
-  const int L = (32 + 2 * E + 2 * I - H - K) % 7;
-  const int M = (A + 11 * H + 22 * L) / 451;
-  return H + L - 7 * M + 114;
+  Monday = 1, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+};
+
+bool leap_year(int year) {
+  if (year % 4 == 0 && (year % 100 != 0 || year % 400)) {
+    return true;
+  }
+  return false;
 }
 
-/*  The result of easter_year is the day number of the month in which Easter occurs in
-    the given year.
-*/
-int easter_day (int year)
-{
-  return (easter_base (year) % 31) + 1;
+int num_days_in_month(Month month, int year) {
+  switch (month) {
+    case January:
+    case March:
+    case May:
+    case July:
+    case August:
+    case October:
+    case December:
+      return 31;
+      break;
+    case February:
+      return 28 + leap_year(year);
+      break;
+    case April:
+    case June:
+    case September:
+    case November:
+      return 30;
+      break;
+  }
 }
 
-/*  The result of easter_month is the month in which Easter occurs in the given year.
-*/
-Month easter_month (int year)
-{
-  return static_cast<Month> (easter_base (year) / 31);
+Weekday first_day_of_year(int year) {
+  /* 2007 was chosen as base year since it's our birthyear
+  Also it started on a monday
+  This function just calculates the amount of years and leap years in between
+  and based on that it calculates the first day of said year
+  */
+  int base_year = 2007; // not necessary, but works nicer
+  Weekday base_day = Monday; // also not necessary
+  int delta_days;
+  int delta_leapyears;
+  
+  if (year == base_year) {
+    return base_day;
+  }
+  else if (year > base_year) {
+    for (int i = base_year; i < year; i++) {
+      delta_days += 1 + leap_year(i);
+    }
+  } else {
+    for (int i = base_year; i > year; i--) {
+      delta_days -= 1 + leap_year(i - 1);
+    }
+  }
+  return static_cast<Weekday> ((base_day + delta_days) % 7);
+  
+}
+
+Weekday first_day_of_month(int year, Month month) {
+  Weekday first_day_of_year = first_day_of_year(year);
+  Weekday first_day = first_day_of_year;
+  for(int i = 1, i < month, i++) {
+    first_day += num_days_in_month(i);
+    first_day %= 7;
+  }
+  return first_day;
 }
 
 void show_month (Month month, int year)
 {
   // implement this function
+
+  str calendar[35];
+  Weekday i;
+  for (i = Monday, i < first_day_of_month(year, month), i++) {
+    calendar [i] = ""
+  }
+  int j = 1;
+  for (i, i < first_day_of_month(year, static_cast<Month>(month + 1)), i++) {
+    calendar[i] = as_string(j);
+    j++;
+  }
+
+  cout << "Mo Tu We Th Fr Sa Su" << endl;
 }
 
 void show_months ()
