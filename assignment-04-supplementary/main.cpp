@@ -14,6 +14,10 @@ enum Weekday
 };
 
 bool leap_year(int year) {
+  /* Leap years occur if a year is divisible by four
+  UNLESS it is divisible by 100
+  UNLESS it is divisible by 400
+  */
   if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
     return true;
   }
@@ -21,6 +25,10 @@ bool leap_year(int year) {
 }
 
 int num_days_in_month(Month month, int year) {
+  /* TIL that there are 7 months with 31 days,
+  and only 4 with 30 days.
+  Anyways, this is a great function.
+  */
   switch (month) {
     case January:
     case March:
@@ -69,6 +77,7 @@ Weekday first_day_of_year(int year) {
       delta_days -= 1 + leap_year(i - 1);
     }
   }
+  // The code below transforms anything outside the range to 1-7
   int final_day = (base_day + delta_days) % 7;
   if (final_day < 1) {
     final_day += 7;
@@ -78,6 +87,8 @@ Weekday first_day_of_year(int year) {
 }
 
 Weekday first_day_of_month(Month month, int year) {
+  /* First day of the year, plus all the days in the past months
+  */
   int first_day = first_day_of_year(year);
   if (month == January) {
     return static_cast<Weekday> (first_day);
@@ -85,6 +96,7 @@ Weekday first_day_of_month(Month month, int year) {
   for(int i = 1; i < static_cast <int> (month); i++) {
     first_day += num_days_in_month(static_cast<Month> (i), year) % 7;
   }
+  // Once again transforms anything outside range (only 0 now) to 1-7
   first_day %= 7;
   if (first_day == 0) {
     first_day = 7;
@@ -94,12 +106,17 @@ Weekday first_day_of_month(Month month, int year) {
 
 void show_month (Month month, int year)
 {
-  // implement this function
-
-  string calendar[42];
-  fill(begin(calendar), end(calendar), "  ");
-  Weekday i = first_day_of_month(month, year);
+  /* Very hard to explain in one go, comments follow at apporpriate lines
+  */
+  string calendar[42]; // Maximum needed (6 lines)
+  fill(begin(calendar), end(calendar), "  "); // Fills the blank spots
+  Weekday i = first_day_of_month(month, year); // Decides where to start
   for (int j = 0; j < num_days_in_month(month, year); j++) {
+    /* This loop fills the necessary slots with numbers
+    Lots of weird + and - due to some things starting with 0 and some
+    starting with 1
+    They 
+    */
     if (j < 9) {
       calendar[i+j-1] = to_string(j+1)+" ";
     }
@@ -107,9 +124,14 @@ void show_month (Month month, int year)
       calendar[i+j-1] = to_string(j+1);
     }
   }
+  // Add the nice header
   cout << "Mo  Tu  We  Th  Fr  Sa  Su" << endl;
   for (int j = 0; j < 42; j++) {
+    // Prints the numbers
     if (j == 35 && calendar[j] == "  ") {
+      /* If the last line is completely empty (most of the time)
+      then just skip it
+      */
       cout << endl;
       break;
     }
@@ -122,6 +144,8 @@ void show_month (Month month, int year)
 
 void show_months ()
 {
+  /* Regulates input
+  */
   int year, month;
   cout << "CALENDAR" << endl;
   cout << "Please only enter numerical data" << endl;
@@ -136,6 +160,8 @@ void show_months ()
 #ifndef TESTING
 int main ()
 {
+  /* Runs the show_months function. That's it
+  */
   show_months();
   
   return 0;
