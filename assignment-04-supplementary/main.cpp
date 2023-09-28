@@ -14,7 +14,7 @@ enum Weekday
 };
 
 bool leap_year(int year) {
-  if (year % 4 == 0 && (year % 100 != 0 || year % 400)) {
+  if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
     return true;
   }
   return false;
@@ -55,7 +55,7 @@ Weekday first_day_of_year(int year) {
   */
   int base_year = 2007; // not necessary, but now you're able to modify it
   Weekday base_day = Monday; // also not necessary
-  int delta_days;
+  int delta_days = 0;
 
   if (year == base_year) {
     return base_day;
@@ -69,7 +69,11 @@ Weekday first_day_of_year(int year) {
       delta_days -= 1 + leap_year(i - 1);
     }
   }
-  return static_cast<Weekday> ((base_day + delta_days) % 7);
+  int final_day = (base_day + delta_days) % 7;
+  if (final_day < 1) {
+    final_day += 7;
+  }
+  return static_cast<Weekday> (final_day);
   
 }
 
@@ -78,7 +82,7 @@ Weekday first_day_of_month(Month month, int year) {
   if (month == January) {
     return static_cast<Weekday> (first_day);
   }
-  for(int i = 1; i < month; i++) {
+  for(int i = 1; i < static_cast <int> (month); i++) {
     first_day += num_days_in_month(static_cast<Month> (i), year) % 7;
   }
   first_day %= 7;
@@ -103,14 +107,13 @@ void show_month (Month month, int year)
       calendar[i+j-1] = to_string(j+1);
     }
   }
-  cout << month << " " << year << endl;
   cout << "Mo  Tu  We  Th  Fr  Sa  Su" << endl;
   for (int j = 0; j < 42; j++) {
-    if (j == 34 && calendar[j+1] == "  ") {
+    if (j == 35 && calendar[j] == "  ") {
       cout << endl;
       break;
     }
-    cout << calendar[j]+"| ";
+    cout << calendar[j]+"  ";
     if ((j+1) % 7 == 0) {
       cout << endl;
     }
@@ -119,18 +122,21 @@ void show_month (Month month, int year)
 
 void show_months ()
 {
-  // implement this function
+  int year, month;
+  cout << "CALENDAR" << endl;
+  cout << "Please only enter numerical data" << endl;
+  cout << "Please enter the year: ";
+  cin >> year;
+  cout << "Please enter the month: ";
+  cin >> month;
+  cout << "Here is the calendar:" << endl << endl;
+  show_month(static_cast<Month> (month), year);
 }
 
 #ifndef TESTING
 int main ()
 {
-  for (int i = 8; i <= 12; i++) {
-    show_month(static_cast<Month> (i), 2007);
-  }
-  for(int i = 1; i <= 12; i++) {
-    show_month(static_cast<Month> (i), 2008);
-  }
+  show_months();
   
   return 0;
 }

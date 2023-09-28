@@ -43,6 +43,6 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/main_test.cpp)
     # Let googletest enumerate the available tests for CTest
     enable_testing()
     include(GoogleTest)
-    gtest_discover_tests(${PROJECT_NAME}_test)
+    gtest_discover_tests(${PROJECT_NAME}_test DISCOVERY_MODE PRE_TEST)
 endif()
 
