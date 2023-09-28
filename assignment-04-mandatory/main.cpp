@@ -50,6 +50,7 @@ Month calculate_easter_month (int year)
 ********************************************************************/
 bool is_leap_year (int year)
 {
+  // returns true if the year is divisible by 4 and not by 100 or if it is divisible 400
   if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ) {
     return true;
   }
@@ -90,22 +91,28 @@ int number_of_days_in_month (int year, Month month)
 ********************************************************************/
 string show_carnival (int easter_day, Month easter_month, int year)
 {
+  /*
+  This function finds the date 49 days (7 weeks) before easter 
+  */
   int carnival_day; 
   int carnival_month = easter_month-1;
-  int carnival_diff = 49 - easter_day;
-  if (carnival_diff > number_of_days_in_month(year, static_cast<Month> (easter_month - 1))) {
-    carnival_diff -= number_of_days_in_month(year, static_cast<Month> (easter_month - 1));
+  int carnival_delta = 49 - easter_day;
+  // Checks if the remaining days before easter are more than the month before, in that case it displays two months back
+  if (carnival_delta > number_of_days_in_month(year, static_cast<Month> (easter_month - 1))) {
+    carnival_delta -= number_of_days_in_month(year, static_cast<Month> (easter_month - 1));
     carnival_month--;
   }
-  carnival_day = number_of_days_in_month(year, static_cast<Month> (carnival_month)) - carnival_diff;
+  carnival_day = number_of_days_in_month(year, static_cast<Month> (carnival_month)) - carnival_delta;
   return to_string(carnival_day) + "-" + to_string(carnival_month);
 }
 
 string show_good_friday (int easter_day, Month easter_month, int year)
 {
-  int good_friday_day;
+  // This function calculates the friday before easter by subtracting 2 days from the date
+  int good_friday_day; 
   int good_friday_month;
   switch (easter_day) {
+    // This switch is used for cases when good frida is in the month before easter
     case 2:
       good_friday_day = number_of_days_in_month(year, static_cast<Month> (easter_month - 1));
       good_friday_month = easter_month - 1;
@@ -124,20 +131,22 @@ string show_good_friday (int easter_day, Month easter_month, int year)
 
 string show_easter (int easter_day, Month easter_month)
 {
+  // This function just converts the parameters to a string
   return to_string(easter_day) + "-" + to_string(easter_month);
 }
 
 string show_whitsuntide (int easter_day, Month easter_month, int year)
 {
+  // this function calculates the date 49 days (7 weeks) after easter
   int whitsuntide_day;
   Month whitsuntide_month;
   int delta_days = 49;
   whitsuntide_month = static_cast<Month>(easter_month + 1);
   delta_days -= number_of_days_in_month(year, easter_month);
   if (delta_days + easter_day <= number_of_days_in_month(year, whitsuntide_month)) {
-    whitsuntide_day =  easter_day + delta_days;
+    whitsuntide_day =  easter_day + delta_days; // Checks if Whitsuntide day is in the next month
   }
-  else {
+  else { // Subtracts the amount of days in he next month from the days after easter and uses that with the month after that for the date
     delta_days -= number_of_days_in_month(year, whitsuntide_month);
     whitsuntide_month = static_cast<Month> (whitsuntide_month + 1);
     whitsuntide_day = easter_day + delta_days;
@@ -152,7 +161,7 @@ string show_ascension_day (int easter_day, Month easter_month, int year)
   int ascension_day;
   Month ascension_month;
   int delta_days = 39;
-
+  // Calculates 39 day after easter in the same way as the Whitsuntide function
   ascension_month = static_cast<Month>(easter_month + 1);
   delta_days -= number_of_days_in_month(year, easter_month);
   if (delta_days + easter_day <= number_of_days_in_month(year, ascension_month)) {
@@ -170,19 +179,20 @@ string show_ascension_day (int easter_day, Month easter_month, int year)
 
 void show_holy_days (int year)
 {
+  // This function just prints out all the return values of the functions for a given year
   int easter_day = calculate_easter_day(year);
   Month easter_month = static_cast<Month>(calculate_easter_month(year));
-  cout << "Carnival: " << show_carnival(easter_day, easter_month, year) << endl
-  << "Good Friday: " << show_good_friday(easter_day, easter_month, year) << endl
-  << "Easter: " << show_easter(easter_day, easter_month) << endl
-  << "Ascension day: " << show_ascension_day(easter_day, easter_month, year) << endl
-  << "Whitsuntide: " << show_whitsuntide(easter_day, easter_month, year) << endl;
+  cout << "Carnival: " << show_carnival(easter_day, easter_month, year) << endl;
+  cout << "Good Friday: " << show_good_friday(easter_day, easter_month, year) << endl;
+  cout << "Easter: " << show_easter(easter_day, easter_month) << endl;
+  cout << "Ascension day: " << show_ascension_day(easter_day, easter_month, year) << endl;
+  cout << "Whitsuntide: " << show_whitsuntide(easter_day, easter_month, year) << endl;
 }
 
 #ifndef TESTING
 int main()
 {
-  int year;
+  int year; // You can input your own year through the console if you run it as main.exe
   cout << "Enter the year you want to calculate: ";
   cin >> year;
   cout << endl;
