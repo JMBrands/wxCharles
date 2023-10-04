@@ -36,7 +36,7 @@ int next_pseudo_random_number ()
 char rotate_char (char a, int r, Action action)
 {
     //  Pre-condition:
-    assert(r > 0 && r <= 65536) ;
+    assert(r >= 0) ;
 
     //  Post-condition:
     // a gets encrypted or decrypted using the number r
@@ -50,7 +50,7 @@ char rotate_char (char a, int r, Action action)
         }
         else {
             // I'm 95% certain I translated the function correctly
-            b = (((a - 32) xor (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
+            b = (((a - 32) + (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
             return b;
         }
     }
@@ -61,7 +61,7 @@ char rotate_char (char a, int r, Action action)
         else {
             // I am 70% certain that the inverse of the encryption function is the function itself
             // Do not hesitate to check that though
-            b = (((a - 32) xor (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
+            b = (((a - 32) - (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
             return b;
         }
     }
@@ -71,12 +71,31 @@ char rotate_char (char a, int r, Action action)
 
 bool open_input_and_output_file (ifstream& infile, ofstream& outfile)
 {
-//  Pre-condition:
-
+//  Pre-condition:  
+    assert(!infile.is_open() && !outfile.is_open());
 //  Post-condition:
+    string infilename, outfilename;
 
-    // implement this function
-    return false;
+    cout << "Enter the name of the input file you want to open: ";
+    cin >> infilename;
+    cout << "Enter the name of the output file you want to open: ";
+    cin >> outfilename;
+    
+    if (infilename == outfilename) {
+        cout << "The files are identical, couldn't open the files." << endl;
+        return false;
+    }
+    infile.open(infilename);
+    outfile.open(outfilename);
+    if (infile.fail()) {
+        cout << "The input file failed to open." << endl;
+        return false;
+    }
+    if (outfile.fail()) {
+        cout << "The output file failed to open." << endl;
+    }
+    cout << "Opened the files." << endl;
+    return true;
 }
 
 Action get_user_action ()
@@ -88,14 +107,14 @@ Action get_user_action ()
     cout << "Do you want to encrypt the file? (y/n): " ;
     string answer ;
     cin  >> answer ;
-    if (answer == "y")
+    if (answer == "y" || answer == "Y")
         return Encrypt;
     else
         return Decrypt;
 }
 
 int initial_encryption_value ()
-{// Pre-conditie:
+{// Pre-condition:
     assert (true) ;
 /*  Post-condition:
     result is a value between 0 and 65355 (both inclusive)
@@ -111,11 +130,20 @@ int initial_encryption_value ()
 
 void use_OTP (ifstream& infile, ofstream& outfile, Action action, int initial_value)
 {
-//  Pre-condition:
+    //  Pre-condition:
+    assert(infile.is_open() && outfile.is_open());
+    //  Post-condition:
 
-//  Post-condition:
-
-    // implement this function
+    initialise_pseudo_random(initial_value);
+    int r;
+    char c;
+    do {
+        c = infile.get();
+        if (!c == infile.eof()) {
+            r = next_pseudo_random_number();
+            outfile << rotate_char(c, r, action);
+        }
+    } while(!infile.fail());
 }
 
 #ifndef TESTING

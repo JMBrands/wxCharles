@@ -86,13 +86,13 @@ TEST(part3, use_OTP_1)
     const string OUTPUT_FILENAME = "output" + to_string(R) + ".txt";
     const string TEST_FILENAME = "test_encrypted_with_" + to_string(R) + ".txt";
 
-    ifstream input_file(INPUT_FILENAME);
-    ofstream output_file(OUTPUT_FILENAME);
+    ifstream input_file(INPUT_FILENAME, ios_base::binary);
+    ofstream output_file(OUTPUT_FILENAME, ios_base::binary);
     use_OTP(input_file, output_file, Encrypt, R);
     output_file.close();
 
-    ifstream expected_file(TEST_FILENAME);
-    ifstream actual_file(OUTPUT_FILENAME);
+    ifstream expected_file(TEST_FILENAME, ios_base::binary);
+    ifstream actual_file(OUTPUT_FILENAME, ios_base::binary);
     int expected_length = get_stream_length(expected_file);
     int actual_length = get_stream_length(actual_file);
 
@@ -107,13 +107,13 @@ TEST(part3, use_OTP_42)
     const string OUTPUT_FILENAME = "output" + to_string(R) + ".txt";
     const string TEST_FILENAME = "test_encrypted_with_" + to_string(R) + ".txt";
 
-    ifstream input_file(INPUT_FILENAME);
-    ofstream output_file(OUTPUT_FILENAME);
+    ifstream input_file(INPUT_FILENAME, ios_base::binary);
+    ofstream output_file(OUTPUT_FILENAME, ios_base::binary);
     use_OTP(input_file, output_file, Encrypt, R);
     output_file.close();
 
-    ifstream expected_file(TEST_FILENAME);
-    ifstream actual_file(OUTPUT_FILENAME);
+    ifstream expected_file(TEST_FILENAME, ios_base::binary);
+    ifstream actual_file(OUTPUT_FILENAME, ios_base::binary);
     int expected_length = get_stream_length(expected_file);
     int actual_length = get_stream_length(actual_file);
 
@@ -128,13 +128,13 @@ TEST(part3, use_OTP_96)
     const string OUTPUT_FILENAME = "output" + to_string(R) + ".txt";
     const string TEST_FILENAME = "test_encrypted_with_" + to_string(R) + ".txt";
 
-    ifstream input_file(INPUT_FILENAME);
-    ofstream output_file(OUTPUT_FILENAME);
+    ifstream input_file(INPUT_FILENAME, ios_base::binary);
+    ofstream output_file(OUTPUT_FILENAME, ios_base::binary);
     use_OTP(input_file, output_file, Encrypt, R);
     output_file.close();
 
-    ifstream expected_file(TEST_FILENAME);
-    ifstream actual_file(OUTPUT_FILENAME);
+    ifstream expected_file(TEST_FILENAME, ios_base::binary);
+    ifstream actual_file(OUTPUT_FILENAME, ios_base::binary);
     int expected_length = get_stream_length(expected_file);
     int actual_length = get_stream_length(actual_file);
 
@@ -149,13 +149,13 @@ TEST(part3, use_OTP_65535)
     const string OUTPUT_FILENAME = "output" + to_string(R) + ".txt";
     const string TEST_FILENAME = "test_encrypted_with_" + to_string(R) + ".txt";
 
-    ifstream input_file(INPUT_FILENAME);
-    ofstream output_file(OUTPUT_FILENAME);
+    ifstream input_file(INPUT_FILENAME, ios_base::binary);
+    ofstream output_file(OUTPUT_FILENAME, ios_base::binary);
     use_OTP(input_file, output_file, Encrypt, R);
     output_file.close();
 
-    ifstream expected_file(TEST_FILENAME);
-    ifstream actual_file(OUTPUT_FILENAME);
+    ifstream expected_file(TEST_FILENAME, ios_base::binary);
+    ifstream actual_file(OUTPUT_FILENAME, ios_base::binary);
     int expected_length = get_stream_length(expected_file);
     int actual_length = get_stream_length(actual_file);
 
