@@ -25,8 +25,10 @@ int next_pseudo_random_number ()
 /*  post-condition:
     result value > 0 and result value <= 65536 and result value != seed at entry of function
 */
+    // Lack of comments, very sad
     const int SEED75 = seed * 75 ;
     int next = (SEED75 & 65535) - (SEED75 >> 16) ;
+    // Makes sure seed > 0 and seed <= 65536
     if (next < 0)
         next += 65537 ;
     seed = next ;
@@ -38,29 +40,31 @@ char rotate_char (char a, int r, Action action)
     //  Pre-condition:
     assert(r >= 0) ;
 
-    //  Post-condition:
-    // a gets encrypted or decrypted using the number r
-
+    /*  Post-condition:
+        result value >= 0, result value < 128,
+        result value = a IF a < 32,
+        result value = a encrypted with r IF a >= 32 AND action = Encryot,
+        result value = a decrypted with r IF a >= 32 AND action = Encrypt
+    */
     char b;
-    // I'll admit, I have no idea if char and int can be used like this together
-    // But it builds, so sure ig
     if (action == Encrypt) {
         if (a < 32) {
+            // If a < 32 gets encrypted, file might get corrupted
             return a;
         }
         else {
-            // I'm 95% certain I translated the function correctly
+            // Encrypts a with the formula given in the assignment
             b = (((a - 32) + (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
             return b;
         }
     }
     else {
         if (a < 32) {
+            // If a < 32 gets encrypted, file might get corrupted
             return a;
         }
         else {
-            // I am 70% certain that the inverse of the encryption function is the function itself
-            // Do not hesitate to check that though
+            // Decrypts a with the formula given in the assignment
             b = (((a - 32) - (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
             return b;
         }
@@ -74,19 +78,24 @@ bool open_input_and_output_file (ifstream& infile, ofstream& outfile)
 //  Pre-condition:  
     assert(!infile.is_open() && !outfile.is_open());
 //  Post-condition:
-    string infilename, outfilename;
+    // Assigns 2 files to infile and outfile
 
+
+    string infilename, outfilename;
+    // Handles the input
     cout << "Enter the name of the input file you want to open: ";
     cin >> infilename;
     cout << "Enter the name of the output file you want to open: ";
     cin >> outfilename;
-    
+    // Checks for double files
     if (infilename == outfilename) {
         cout << "The files are identical, couldn't open the files." << endl;
         return false;
     }
+    // Actually opens the files
     infile.open(infilename);
     outfile.open(outfilename);
+    // Error handling
     if (infile.fail()) {
         cout << "The input file failed to open." << endl;
         return false;
@@ -132,11 +141,15 @@ void use_OTP (ifstream& infile, ofstream& outfile, Action action, int initial_va
 {
     //  Pre-condition:
     assert(infile.is_open() && outfile.is_open());
-    //  Post-condition:
-
+    /*  Post-condition:
+        Encrypts the file if action is Encrypt, otherwise it will decrypt the file
+        If the file gets encrypte
+ohs lliw ti 
+    */
     initialise_pseudo_random(initial_value);
     int r;
     char c;
+    // Encodesh/decodes each character in the file
     do {
         c = infile.get();
         if (!c == infile.eof()) {
