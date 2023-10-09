@@ -2,6 +2,7 @@
 #include <fstream>          // for file I/O
 #include <cassert>          // for assertion checking
 #include <set>
+#include <cctype>
 
 using namespace std;
 
@@ -18,7 +19,11 @@ void initialize_words (set<string>& dictionary)
     
     ifstream infile("words.txt", ios_base::binary); // ios_base::binary so it doesn't convert LF to CRLF on windows
     string line;
+    char lastchar = line.back();
     while (getline(infile, line)) {
+        if (!isalpha(lastchar)) {
+            line.pop_back();
+        }
         dictionary.insert(line);
     }
 }
@@ -33,14 +38,15 @@ bool word_exists(string word, set<string> dictionary) {
 
 }
 
-bool file_valid(string file, set<string> dictionary, double precision = 0.5) {
+bool file_valid(string file, set<string> dictionary, double precision = 0.5, double cancelthreshold = 0.1) {
 
-    assert(precision >= 0 && precision <= 1 && file.length() != 0 && !dictionary.empty());
+    assert(precision >= 0 && precision <= 1 && cancelthreshold > 0 && cancelthreshold <= 1 && file.length() > 0 && !dictionary.empty());
     
     int words, correct = 0;
     int num = 0;
     char c;
     string word;
+    int totallength = file.length();
     while (file.length() > 0) 
     {
         num = 0;
@@ -49,16 +55,21 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5) {
             c = file[num];
             num ++;
         }
-        while ((c > 64 && c < 91) || (c > 96 && c < 123));
+        while (isalnum(c));
 
         if (num > 1) {
             words ++;
             word = file.substr(0, num);
-            file.erase(0, num);
             if (word_exists(word, dictionary)) {
                 correct ++;
             }
         }
+        file.erase(0, num);
+
+        if (static_cast<double> (file.length()) / static_cast<double> (totallength) < 1 - cancelthreshold &&
+            static_cast<double> (correct) / static_cast<double> (words)  < precision) {
+                break;
+            }
     }
     if (static_cast<double> (correct) / static_cast<double> (words)  >= precision) {
         return true;
@@ -146,26 +157,33 @@ void decrypt(ifstream& infile, ofstream& outfile, int initial_value) {
     initialise_pseudo_random(initial_value);
     int r;
     char c;
+    string output;
     do {
         c = infile.get();
         if (!c == infile.eof()) {
             r = next_pseudo_random_number();
-            outfile << rotate_char(c, r);
+            output += rotate_char(c, r);
         }
     } while(!infile.fail());
+    if (file_valid(output, dictionary, 0.5, 0.5)) {
+        outfile << "r = " << r << endl << endl;
+        outfile << "Result: " << endl;
+        outfile << output;
+    }
+
+    infile.clear();
+    infile.seekg(0);
 }
 
 #ifndef TESTING
 int main ()
 {
     initialize_words(dictionary);
-    ifstream infile("secret.txt", ios_base::binary);
-    ofstream outfile("sources.txt", ios_base::binary);
+    ifstream infile("../files/secret.txt", ios_base::binary);
+    ofstream outfile("../files/sources.txt", ios_base::binary);
     
     for (int r = 1; r < 65536; r++) {
-        outfile << "r = " << r << endl << endl;
         decrypt(infile, outfile, r);
-        outfile << endl;
     }
     return 0;
 }
