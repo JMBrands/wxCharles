@@ -166,6 +166,7 @@ void decrypt(ifstream& infile, ofstream& outfile, int initial_value) {
         }
     } while(!infile.fail());
     if (file_valid(output, dictionary, 0.5, 0.5)) {
+        
         outfile << "r = " << r << endl << endl;
         outfile << "Result: " << endl;
         outfile << output;
@@ -182,7 +183,10 @@ int main ()
     ifstream infile("../files/secret.txt", ios_base::binary);
     ofstream outfile("../files/sources.txt", ios_base::binary);
     
-    for (int r = 1; r < 65536; r++) {
+    for (int r = 65535; r >= 0; r--) {
+        if (r % 10 == 0) {
+            cout << r << endl;
+        }
         decrypt(infile, outfile, r);
     }
     return 0;
