@@ -130,6 +130,7 @@ TEST(part2, read_universe_10_cell_row)
     }
 
     EXPECT_TRUE(read_universe_file("10_cell_row.txt", universe));
+    show_universe(universe);
     EXPECT_TRUE(generation_match(universe, expected));
 }
 
@@ -329,6 +330,14 @@ TEST(part2, read_universe_bad_format2)
 {
     Cell universe[NO_OF_ROWS][NO_OF_COLUMNS];
     EXPECT_FALSE(read_universe_file("bad_format_2.txt", universe));
+}
+
+TEST(part3, check_neighours) {
+    Cell universe[NO_OF_ROWS][NO_OF_COLUMNS];
+    read_universe_file("glider0.txt", universe);
+    EXPECT_EQ(check_neighbours(universe,37,4),2);
+    EXPECT_EQ(check_neighbours(universe,36,3),3);
+    EXPECT_EQ(check_neighbours(universe,38,3),5);
 }
 
 TEST(part3, glider_0)
