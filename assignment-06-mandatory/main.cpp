@@ -29,12 +29,17 @@ Cell cell_at (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS], int row, int column)
 // Part 2: setting the scene
 bool read_universe_file (string filename, Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
 {
-    // TODO: Pre-/Post-conditions
+    // Pre-condition
+    assert(true);
+    // Post-condition
+    // The functions opens the file at filename, reads its contents and puts them into an array, 
+    // If the file isn't properly formatted or couldn't be opened, it will return false,
+    // It will return true when the contents of the file have been analysed and the corresponding values have been written to the array
 
     ifstream infile(filename, ios_base::binary); // ios_base::binary to prevent converting LF to CRLF on windows
 
     if (infile.fail()) {
-        return false;
+        return false; // Returns false if the file couldn't be opened
     }
 
     int row, col;
@@ -43,29 +48,34 @@ bool read_universe_file (string filename, Cell universe [NO_OF_ROWS][NO_OF_COLUM
         for (col = 0; col < NO_OF_COLUMNS; col++) {
             do {
                 c = infile.get();
-                if (c != '.' && c != '*' && c != '\n') {
-                    return false;
+                if (c != DEAD && c != LIVE && c != '\n') {
+                    return false; // Returns false if the character isn't a valid character.
                 }
-            } while (c != '.' && c != '*');
+            } while (c != DEAD && c != LIVE);
             switch (c) {
-                case '.':
+                case DEAD:
                     universe[row][col] = Dead;
                     break;
-                case '*':
+                case LIVE:
                     universe[row][col] = Live;
                     break;
                 default:
-                    return false;
+                    return false; // Returns false if c somehow still isn't a valid character, this is redundant.
             }
         }
     }
     infile.close();
-    return true;
+    return true; // Returns true only if the loop has ran without returning
 }
 
 void show_universe (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
 {
-    // TODO: Pre-/Post-conditions
+    // Pre-condition
+    assert(true);
+    // Post-condition
+    // Runs two loops, one to loop through the outer array, and another to loop through the inner arrays,
+    // It then checks the value and prints the corresponding character, 
+    // It also prints an endl after every inner array
 
     int row, col;
     for (row = 0; row < NO_OF_ROWS; row++) {
@@ -88,7 +98,12 @@ void show_universe (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
 int check_neighbours(Cell universe [NO_OF_ROWS][NO_OF_COLUMNS], int row, int col) {
     // Pre-condition
     assert(row >= 0 && row < NO_OF_ROWS && col >= 0 && col < NO_OF_COLUMNS);
-    // TODO: Post-condition
+    // Post-condition
+    // Initialises a variable neighbours, 
+    // Adds the value of every cell in a 3x3 area around the cell at (row, col) and adds them to neighbours,
+    // Then it subtracts the value of the center cell because that cell isn't excluded.
+    // The function makes use of the fact that a dead cell has value 0 and a live cell has value 1
+
 
     Cell current = cell_at(universe, row,col);
     int neighbours, row_offset, col_offset;
@@ -105,7 +120,16 @@ int check_neighbours(Cell universe [NO_OF_ROWS][NO_OF_COLUMNS], int row, int col
 // Part 3: the next generation
 void next_generation (Cell now [NO_OF_ROWS][NO_OF_COLUMNS], Cell next [NO_OF_ROWS][NO_OF_COLUMNS])
 {
-    // TODO: Pre-/Post-conditions
+    // Pre-condition
+    assert(true);
+    // Post-condition
+    /* The function checks every cell in the array now and counts its live neighbours,
+    it then applies the rules: 
+    1. A live cell dies if it has less than 2 live neighbours
+    2. A live cell stays alive if it has 2 or 3 live neighbours
+    3. A live cell dies if it has more than 3 live neighbours
+    4. A dead cell comes to life if it has exactly 3 live neighbours
+    and writes the new value of the cell to the array next*/
     
     int row, col, neighbours;
     Cell current;
@@ -131,7 +155,6 @@ void next_generation (Cell now [NO_OF_ROWS][NO_OF_COLUMNS], Cell next [NO_OF_ROW
             }
         }
     }
-    show_universe(next);
 }
 
 #ifndef TESTING
