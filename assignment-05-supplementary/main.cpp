@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>          // for file I/O
+#include <sstream>
 #include <cassert>          // for assertion checking
 #include <set>
 #include <cctype>
@@ -41,7 +42,11 @@ bool word_exists(string word, set<string> dictionary) {
 bool file_valid(string file, set<string> dictionary, double precision = 0.5, double cancelthreshold = 0.1) {
 
     assert(precision >= 0 && precision <= 1 && cancelthreshold > 0 && cancelthreshold <= 1 && file.length() > 0 && !dictionary.empty());
-    
+    // post-condition
+    // This will return true if a certain part of the words in a file are in a list of words,
+    // It returns false when it finds any characters that shouldn't be in the final file or not enough of the words are in the word list.
+    // This is the word list we used: https://www.mit.edu/~ecprice/wordlist.10000
+
     int words, correct = 0;
     int num = 0;
     char c;
@@ -54,12 +59,16 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5, dou
         do {
             c = file[num];
             num ++;
+            if (c == 127 || (c < 32 && c != 0 && c != 9 && c != 10 && c != 13)) // makes it a bit faster as these characters will not be in the good file 
+                return false;
         }
         while (isalnum(c));
 
         if (num > 1) {
             words ++;
             word = file.substr(0, num);
+            
+
             if (word_exists(word, dictionary)) {
                 correct ++;
             }
@@ -71,7 +80,8 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5, dou
                 break;
             }
     }
-    if (static_cast<double> (correct) / static_cast<double> (words)  >= precision) {
+    // cout << (static_cast<double> (correct) / static_cast<double> (words)) << endl; 
+    if (static_cast<double> (correct) / static_cast<double> (words)  <= precision) {
         return true;
     }
     else {
@@ -126,32 +136,9 @@ char rotate_char (char a, int r)
     return '?';
 }
 
-bool open_input_and_output_file (ifstream& infile, ofstream& outfile, string infilename, string outfilename)
-{
-//  Pre-condition:  
-    assert(!infile.is_open() && !outfile.is_open());
-//  Post-condition:
-
-    if (infilename == outfilename) {
-        cout << "The files are identical, couldn't open the files." << endl;
-        return false;
-    }
-    infile.open(infilename, ios_base::binary);
-    outfile.open(outfilename, ios_base::binary);
-    if (infile.fail()) {
-        cout << "The input file failed to open." << endl;
-        return false;
-    }
-    if (outfile.fail()) {
-        cout << "The output file failed to open." << endl;
-    }
-    cout << "Opened the files." << endl;
-    return true;
-}
-
-void decrypt(ifstream& infile, ofstream& outfile, int initial_value) {
+void decrypt(ifstream& infile, ostringstream& outstr, int initial_value) {
     //  Pre-condition:
-    assert(infile.is_open() && outfile.is_open());
+    assert(infile.is_open());
     //  Post-condition:
 
     initialise_pseudo_random(initial_value);
@@ -162,32 +149,73 @@ void decrypt(ifstream& infile, ofstream& outfile, int initial_value) {
         c = infile.get();
         if (!c == infile.eof()) {
             r = next_pseudo_random_number();
-            output += rotate_char(c, r);
+            outstr << rotate_char(c, r);
         }
     } while(!infile.fail());
-    if (file_valid(output, dictionary, 0.5, 0.5)) {
-        
-        outfile << "r = " << r << endl << endl;
-        outfile << "Result: " << endl;
-        outfile << output;
-    }
+    
+}
 
-    infile.clear();
-    infile.seekg(0);
+int brute_force_decrypt(string infilename, string outfilename) {
+    assert(true);
+    // Post-condition
+    // This function brute-forces the decryption by trying decryptig with every random seed 
+    // And checking with a 10000 word database if the resulting file is a proper english text,
+    // When it thinks it's a proper text, it writes the text to a file and returns the seed r
+
+    for (int r = 1; r <= 655535; r++) { // This is the range the random seed is supposed to be in
+        cout << r << ": ";
+        ifstream infile(infilename, ios_base::binary);
+        ostringstream out("", ios_base::binary);
+        decrypt(infile, out, r); // Decrypts with seed r
+        infile.close();
+
+        if (file_valid(out.str(), dictionary, 0.8)) { // Checks if at least 20% of the word are in word list  
+            cout << "valid" << endl;
+            ofstream outf("source.txt", ios_base::binary); // Opens output file if the decryption is valid
+            outf << out.str();
+            outf.close();
+            return r;
+        } else {
+            cout << "invalid" << endl;
+        }
+    }
+}
+
+int brute_force_decrypt(string infilename, string outfilename) {
+    assert(true);
+    // Post-condition
+    // This function brute-forces the decryption by trying decryptig with every random seed 
+    // And checking with a 10000 word database if the resulting file is a proper english text,
+    // When it thinks it's a proper text, it writes the text to a file and returns the seed r
+
+    for (int r = 1; r <= 655535; r++) { // This is the range the random seed is supposed to be in
+        cout << r << ": ";
+        ifstream infile(infilename, ios_base::binary);
+        ostringstream out("", ios_base::binary);
+        decrypt(infile, out, r); // Decrypts with seed r
+        infile.close();
+
+        if (file_valid(out.str(), dictionary, 0.8)) { // Checks if at least 20% of the word are in word list  
+            cout << "valid" << endl;
+            ofstream outf("source.txt", ios_base::binary); // Opens output file if the decryption is valid
+            outf << out.str();
+            outf.close();
+            return r;
+        } else {
+            cout << "invalid" << endl;
+        }
+    }
 }
 
 #ifndef TESTING
-int main ()
+int main (int argc, char* argv[])
 {
     initialize_words(dictionary);
-    ifstream infile("../files/secret.txt", ios_base::binary);
-    ofstream outfile("../files/sources.txt", ios_base::binary);
-    
-    for (int r = 65535; r >= 0; r--) {
-        if (r % 10 == 0) {
-            cout << r << endl;
+    for (int r = 1; r < 65536; r += 1) {
+        initialise_pseudo_random(r);
+        if ((next_pseudo_random_number() - next_pseudo_random_number())%128 == -11100%128) {
+            cout << r;
         }
-        decrypt(infile, outfile, r);
     }
     return 0;
 }
