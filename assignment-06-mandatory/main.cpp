@@ -48,7 +48,7 @@ bool read_universe_file (string filename, Cell universe [NO_OF_ROWS][NO_OF_COLUM
         for (col = 0; col < NO_OF_COLUMNS; col++) {
             do {
                 c = infile.get();
-                if (c != DEAD && c != LIVE && c != '\n') {
+                if (c != DEAD && c != LIVE && c != '\n' && c != 13) {
                     cout << "Error: char " << static_cast<int> (c) << endl;
                     return false; // Returns false if the character isn't a valid character.
                 }
