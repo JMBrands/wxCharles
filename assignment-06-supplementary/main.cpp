@@ -11,18 +11,24 @@ enum Cell {Dead=0, Live};                         // a cell is either Dead or Li
 
 #ifdef _WIN32
 const bool clear_before_draw = true;
+const bool FANCY_NOTATION = false;
 #else
 const bool clear_before_draw = false;
+const bool FANCY_NOTATION = true;
 #endif
 
 const char DEAD             = '.';               // the presentation of a dead cell (both on file and screen)
 const char LIVE             = '*';               // the presentation of a live cell (both on file and screen)
 
-const string DEAD_printed   = "\x1b[40m\x1b[37m\u25af";
-const string LIVE_printed   = "\x1b[47m\x1b[30m\u25af";
+const string DEAD_STR       = ".";
+const string LIVE_STR       = "*";
+
+const string DEAD_FANCY     = "\x1b[40m\x1b[37m ";
+const string LIVE_FANCY     = "\x1b[47m\x1b[30m ";
 
 const int NO_OF_ROWS        = 40 ;                // the number of rows (height) of the universe (both on file and screen)
 const int NO_OF_COLUMNS     = 60 ;                // the number of columns (width) of the universe (both on file and screen)
+
 
 Cell cell_at (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS], int row, int column)
 {
@@ -52,13 +58,13 @@ void show_universe (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
     for (row = 0; row < NO_OF_ROWS; row++) {
         cout << endl;
         for (col = 0; col < NO_OF_COLUMNS; col++) {
-            set_cursor_position(row,col);
+            set_cursor_position(col, row);
             switch (cell_at(universe, row, col)) {
                 case Dead:
-                    cout << DEAD_printed;
+                    cout << (FANCY_NOTATION ? DEAD_FANCY : DEAD_STR);
                     break;
                 case Live:
-                    cout << LIVE_printed;
+                    cout << (FANCY_NOTATION ? LIVE_FANCY : LIVE_STR);
                     break;
                 default:
                     break;
@@ -76,7 +82,7 @@ void init_screen() {
     for (row = 0; row < NO_OF_ROWS; row++) {
         cout << endl;
         for (col = 0; col < NO_OF_COLUMNS; col++) {
-            cout << DEAD_printed;
+            cout << (FANCY_NOTATION ? DEAD_FANCY : DEAD_STR);
         }
     }
 }
@@ -163,7 +169,7 @@ bool read_universe_file (string filename, Cell universe [NO_OF_ROWS][NO_OF_COLUM
         for (col = 0; col < NO_OF_COLUMNS; col++) {
             do {
                 c = infile.get();
-                if (c != DEAD && c != LIVE && c != '\n') {
+                if (c != DEAD && c != LIVE && c != '\n' && c != 13) {
                     return false; // Returns false if the character isn't a valid character.
                 }
             } while (c != DEAD && c != LIVE);
@@ -205,11 +211,13 @@ void save_universe(string filename, Cell universe[NO_OF_ROWS][NO_OF_COLUMNS]) {
         outfile << endl;
     }
     outfile.close();
+    cout << "Succesfully saved to " << "filename" << endl;
 }
 
 #ifndef TESTING
 int main ()
 {
+
     string filename;
     Cell universes[2][NO_OF_ROWS][NO_OF_COLUMNS];
     cout << "Enter the configuration file name: ";
@@ -238,9 +246,21 @@ int main ()
         sleep(delay);
     }
     cout << "\x1b[?25h" << endl;
-    cout << "Enter the name of the file to save the current configuration to: ";
-    cin >> filename;
-    save_universe(filename,universes[(i+1)%2]);
+    char opt;
+    cout << "Do you wish to save? (y/N) ";
+    cin >> opt;
+    opt = opt < 97 ? opt + 32 : opt;
+    
+    if (opt == 'y') {
+        cout << "Enter the name of the file to save the current configuration to: ";
+        cin >> filename;
+        save_universe(filename,universes[(i+1)%2]);
+    }
+    else {
+        cout << "Didn't save." << endl;
+    }
+
+
     return 0;
 }
 #endif

@@ -49,6 +49,7 @@ bool read_universe_file (string filename, Cell universe [NO_OF_ROWS][NO_OF_COLUM
             do {
                 c = infile.get();
                 if (c != DEAD && c != LIVE && c != '\n') {
+                    cout << "Error: char " << static_cast<int> (c) << endl;
                     return false; // Returns false if the character isn't a valid character.
                 }
             } while (c != DEAD && c != LIVE);
@@ -80,7 +81,7 @@ void show_universe (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
     int row, col;
     for (row = 0; row < NO_OF_ROWS; row++) {
         for (col = 0; col < NO_OF_COLUMNS; col++) {
-            switch (universe[row][col]) {
+            switch (cell_at(universe, row, col)) {
                 case Dead:
                     cout << DEAD;
                     break;
@@ -137,16 +138,21 @@ void next_generation (Cell now [NO_OF_ROWS][NO_OF_COLUMNS], Cell next [NO_OF_ROW
         for (col = 0; col < NO_OF_COLUMNS; col++) {
             current = cell_at(now, row, col);
             neighbours = check_neighbours(now, row, col);
-            if (!current && neighbours == 3) {
-                next[row][col] = Live;
-            } else if (!current && neighbours != 3) {
-                next[row][col] = Dead;
-            }
             if (current) {
                 switch (neighbours) {
                     case 2:
                     case 3:
                         next[row][col] = Live;    
+                        break;
+                    default:
+                        next[row][col] = Dead;
+                        break;
+                }
+            }
+            else {
+                switch (neighbours) {
+                    case 3:
+                        next[row][col] = Live;
                         break;
                     default:
                         next[row][col] = Dead;
