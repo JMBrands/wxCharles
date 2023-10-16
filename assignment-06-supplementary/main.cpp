@@ -11,17 +11,12 @@ enum Cell {Dead=0, Live};                         // a cell is either Dead or Li
 
 #ifdef _WIN32
 const bool clear_before_draw = true;
-const bool FANCY_NOTATION = false;
 #else
 const bool clear_before_draw = false;
-const bool FANCY_NOTATION = true;
 #endif
 
 const char DEAD             = '.';               // the presentation of a dead cell (both on file and screen)
 const char LIVE             = '*';               // the presentation of a live cell (both on file and screen)
-
-const string DEAD_STR       = ".";
-const string LIVE_STR       = "*";
 
 const string DEAD_FANCY     = "\x1b[40m\x1b[37m ";
 const string LIVE_FANCY     = "\x1b[47m\x1b[30m ";
@@ -58,13 +53,18 @@ void show_universe (Cell universe [NO_OF_ROWS][NO_OF_COLUMNS])
     for (row = 0; row < NO_OF_ROWS; row++) {
         cout << endl;
         for (col = 0; col < NO_OF_COLUMNS; col++) {
+#ifdef _WIN32
             set_cursor_position(col, row);
+#else
+            // set_cursor_position(col, row); // Use this if line 28 in animation.h is std::cout << "\x1b[" << (line+1) << ";" << (column+1) << "H";
+            set_cursor_position(row, col); // Use this if line 28 in animation.h is std::cout << "\x1b[" << (column+1) << ";" << (line+1) << "H";
+#endif
             switch (cell_at(universe, row, col)) {
                 case Dead:
-                    cout << (FANCY_NOTATION ? DEAD_FANCY : DEAD_STR);
+                    cout << DEAD_FANCY;
                     break;
                 case Live:
-                    cout << (FANCY_NOTATION ? LIVE_FANCY : LIVE_STR);
+                    cout << LIVE_FANCY;
                     break;
                 default:
                     break;
@@ -82,7 +82,7 @@ void init_screen() {
     for (row = 0; row < NO_OF_ROWS; row++) {
         cout << endl;
         for (col = 0; col < NO_OF_COLUMNS; col++) {
-            cout << (FANCY_NOTATION ? DEAD_FANCY : DEAD_STR);
+            cout << DEAD_FANCY;
         }
     }
 }

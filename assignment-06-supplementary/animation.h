@@ -25,7 +25,7 @@ void set_cursor_position(int column, int line) {
 #else
     // ANSI escape code "CSI n ; m H" (Cursor position)
     // see: https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
-    std::cout << "\x1b[" << (column+1) << ";" << (line+1) << "H";
+    std::cout << "\x1b[" << (line+1) << ";" << (column+1) << "H";
 #endif
 }
 
