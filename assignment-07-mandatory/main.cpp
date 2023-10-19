@@ -184,7 +184,7 @@ void enter_filename(ifstream& infile)
 
 }
 
-//#ifndef TESTING
+#ifndef TESTING
 int main ()
 {// precondition:
     assert(true);
@@ -332,4 +332,4 @@ int main ()
 
     return 0;
 }
-//#endif
+#endif
