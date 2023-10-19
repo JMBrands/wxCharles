@@ -30,28 +30,9 @@ TEST(checking, word_exists) {
 }
 
 TEST(checking, file_valid) {
-    EXPECT_TRUE(file_valid("a warthog investigator works here", dictionary));
+    initialize_words(dictionary);
+    EXPECT_TRUE(file_valid("a warthog investigator works here", dictionary, 0.5, 1));
 
 }
 
-TEST(decrypting, decrypting) {
-    bool solved = false;
-
-    for (int r = 1; !solved && r <= 6555; r++) {
-        cout << r << ": ";
-        ifstream infile("secret.txt", ios_base::binary);
-        ostringstream out("", ios_base::binary);
-        decrypt(infile, out, r);
-        infile.close();
-        // cout << out.str() << endl;
-        if (file_valid(out.str(), dictionary, 0.8)) {
-            cout << "valid" << endl;
-            ofstream outf("source.txt", ios_base::binary);
-            outf << out.str();
-            outf.close();
-            solved = true;
-        } else {
-            cout << "invalid" << endl;
-        }
-    }
-}
+// No test for the brute force decrypt since the entire project is a test for that
