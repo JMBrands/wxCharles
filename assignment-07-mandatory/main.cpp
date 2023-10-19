@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include <cassert>
 
@@ -7,8 +8,9 @@ using namespace std;
 
 const int MAX_NO_OF_TERMS = 100;         // the maximum number of terms to read for a word sequence
 const int MAX_NO_OF_WORDS = 25000;       // the maximum number of words to read from a text file
+const int MAX_NO_OF_CHARS = 1000;         // the maximum number of characters to use as parameter for some commands
 
-enum Command {enter = 0, content, stop};
+enum Command {Enter = 0, Content, Stop, Count, Where, Context};
 
 bool read_word (ifstream& infile, string& word)
 {// precondition:
@@ -19,6 +21,86 @@ bool read_word (ifstream& infile, string& word)
 */
     infile >> word;
     return !infile.fail();
+}
+
+int find_in_array(char source [MAX_NO_OF_CHARS], char target, int start = 0, int stop = MAX_NO_OF_CHARS - 1)
+{// precondition:
+    assert (start >= 0 && stop < MAX_NO_OF_CHARS);
+/*  postcondition:
+    result is the first index the target character is found
+    else, return -1
+*/
+    if (start > stop) {
+        return -1;
+    }
+
+    int i;
+    for(i = start; i <= stop; i++) {
+        if (source[i] == target) {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+int process_terms(istream& input, string terms [MAX_NO_OF_TERMS])
+{// precondition:
+    assert (input.is_open());
+/*  postcondition:
+        returns the amount of terms, and fills the array terms with the correct amount
+*/
+
+    int next_delim = 0;
+    int start_position = 1; // the first character is always a space
+    int no_of_terms = 0;
+    int input_length;
+    char sequence [MAX_NO_OF_CHARS];
+    string cpp_sequence;
+
+    input.getline(sequence, MAX_NO_OF_CHARS, '\n');
+
+    cpp_sequence = static_cast<string>(sequence);
+    input_length = ssize(cpp_sequence) + 1;
+
+    while (next_delim != -1 && start_position != input_length) {
+        next_delim = find_in_array(sequence, ' ', start_position, input_length);
+        if (next_delim == -1) {
+            next_delim = find_in_array(sequence, '\0', start_position, input_length);
+        }
+        if (next_delim == -1) {
+            continue;
+        }
+
+        if (next_delim - start_position == 0) { // allows for more than one space between words
+            start_position ++;
+            continue;
+        }
+
+        cpp_sequence = static_cast<string>(sequence);
+        terms[no_of_terms] = cpp_sequence.substr(start_position, next_delim - start_position);
+        start_position = next_delim;
+        if (start_position == input_length) {
+            continue;
+        }
+        no_of_terms ++;
+    }
+
+    return no_of_terms;
+}
+
+void display_occurences(int occurences, int no_of_words)
+{// precondition:
+    assert (no_of_words >= occurences);
+/*  postcondition:
+    uses cout to display the information given in occurences and no_of_words
+*/
+
+    // Using an int for this so it rounds automatically
+    int percentage = (occurences * 100)/no_of_words;
+
+    cout << "Found sequence " << occurences << " times in  " << no_of_words << " words (" << percentage << "%)" << endl << endl;
+
 }
 
 int enter_command (string filename, string content [MAX_NO_OF_WORDS])
@@ -33,12 +115,12 @@ int enter_command (string filename, string content [MAX_NO_OF_WORDS])
 
     ifstream infile;
     if (infile.is_open()) {
-        cout << "open";
+        cout << "File is open already";
         return 0;
     }
     infile.open(filename);
     if (!infile.is_open()) {
-        cout << "couldn't open " << filename << endl;
+        cout << "Couldn't open " << filename << endl;
         return 0;
     }
     int i = 0;
@@ -102,7 +184,7 @@ void enter_filename(ifstream& infile)
 
 }
 
-#ifndef TESTING
+//#ifndef TESTING
 int main ()
 {// precondition:
     assert(true);
@@ -111,18 +193,22 @@ int main ()
 */
     ifstream infile;
     string contents [MAX_NO_OF_WORDS];
-    string options [3] = {"enter", "content", "stop"};
+    string options [6] = {"enter", "content", "stop", "count", "where", "context"};
     string command;
     string filename;
-    int no_of_words;
+    string terms [MAX_NO_OF_TERMS];
+    int no_of_words = 0;
+    int no_of_terms = 0;
+    string purge; // used to purge the command line
 
-    while (command != options[stop]) {
+
+    while (command != options[Stop]) {
         cout << "> ";
         cin >> command;
 
         
 
-        if (command == options[enter]) {
+        if (command == options[Enter]) {
             getline(cin, filename);
             filename = filename.substr(1, ssize(filename));
             no_of_words = enter_command(filename, contents);
@@ -135,7 +221,7 @@ int main ()
             cout << endl;
         }
         
-        else if (command == options[content]) {
+        else if (command == options[Content]) {
             if (no_of_words > 0) {
                 for (int i = 0; i < no_of_words; i++) {
                     cout << contents[i] << endl;
@@ -149,19 +235,95 @@ int main ()
             cout << endl;
         }
 
-        else if (command == options[stop]) {
+        else if (command == options[Stop]) {
             continue;
+        }
+
+        else if (command == options[Count]) {
+            if (no_of_words == 0) {
+                cout << "No file read. Use enter <filename> to open a file." << endl;
+                continue;
+            }
+
+            no_of_terms = process_terms(cin, terms);
+
+            int occurences = count_command(contents, no_of_words, terms, no_of_terms);
+            display_occurences(occurences, no_of_words);
+        }
+
+        else if (command == options[Where]) {
+            if (no_of_words == 0) {
+                cout << "No file read. Use enter <filename> to open a file." << endl;
+                continue;
+            }
+
+            no_of_terms = process_terms(cin, terms);
+            int no_of_match = 0;
+            for (int i = 0; i < no_of_words; i++) {
+                if (contents[i] == terms[no_of_match]) {
+                    no_of_match ++;
+                    if (no_of_match == no_of_terms) {
+                        cout << "Found occurence at index " << i - no_of_terms + 2 << endl;
+                        no_of_match = 0;
+                    }
+                }
+                else {
+                    no_of_match = 0;
+                }
+            }
+
+            cout << endl;
+
+            int occurences = count_command(contents, no_of_words, terms, no_of_terms);
+            display_occurences(occurences, no_of_words);
+        }
+
+        else if (command == options[Context]) {
+            if (no_of_words == 0) {
+                cout << "No file read. Use enter <filename> to open a file." << endl;
+                continue;
+            }
+            int context_amount;
+            cin >> context_amount;
+
+            no_of_terms = process_terms(cin, terms);
+
+            cout << context_amount << endl;
+            
+            int no_of_match = 0;
+            for (int i = 0; i < no_of_words; i++) {
+                if (contents[i] == terms[no_of_match]) {
+                    no_of_match ++;
+                    if (no_of_match == no_of_terms) {
+                        for (int j = max(0, i-no_of_terms-context_amount+1); j <= min(no_of_words, i+context_amount); j++) {
+                            cout << contents[j] << " ";
+                        }
+                        cout << endl;
+                                                
+                        no_of_match = 0;
+                    }
+                }
+                else {
+                    no_of_match = 0;
+                }
+            }
+            cout << endl;
+
+            int occurences = count_command(contents, no_of_words, terms, no_of_terms);
+            display_occurences(occurences, no_of_words);
         }
 
         else {
             cout << "That is not a command" << endl;
         }
         
-              
+        if(command != options[Enter] && command != options[Count]
+            && command != options[Where] && command != options[Context]) {
+            getline(cin, purge);
+        }
         
     }
 
-
     return 0;
 }
-#endif
+//#endif
