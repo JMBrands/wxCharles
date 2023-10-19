@@ -209,6 +209,7 @@ int main ()
         
 
         if (command == options[Enter]) {
+            // Opens the file and reads it to contents
             getline(cin, filename);
             filename = filename.substr(1, ssize(filename));
             no_of_words = enter_command(filename, contents);
@@ -222,6 +223,7 @@ int main ()
         }
         
         else if (command == options[Content]) {
+            // Lists the current contents
             if (no_of_words > 0) {
                 for (int i = 0; i < no_of_words; i++) {
                     cout << contents[i] << endl;
@@ -236,10 +238,12 @@ int main ()
         }
 
         else if (command == options[Stop]) {
+            // Stops the program
             continue;
         }
 
         else if (command == options[Count]) {
+            // Counts the amount of time a sequence occurs in the contents
             if (no_of_words == 0) {
                 cout << "No file read. Use enter <filename> to open a file." << endl;
                 continue;
@@ -252,6 +256,7 @@ int main ()
         }
 
         else if (command == options[Where]) {
+            // Displays the indices where a sequence occurs in the contents
             if (no_of_words == 0) {
                 cout << "No file read. Use enter <filename> to open a file." << endl;
                 continue;
@@ -279,6 +284,7 @@ int main ()
         }
 
         else if (command == options[Context]) {
+            // Displays all occurences of a sequence in the contents, with context surrounding it
             if (no_of_words == 0) {
                 cout << "No file read. Use enter <filename> to open a file." << endl;
                 continue;
