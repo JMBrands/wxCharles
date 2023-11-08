@@ -35,6 +35,20 @@ bool equal_content (string data1 [], string data2 [], int length)
     return true;
 }
 
+TEST(find_in_array, abc)
+{
+    char abc [10] = "abcd ef g";
+    char space = ' ';
+    EXPECT_EQ(find_in_array(abc, space), 4);
+}
+
+TEST(find_in_array, rose)
+{
+    char desktop [10] = " is a";
+    char space = ' ';
+    EXPECT_EQ(find_in_array(desktop, space), 0);
+}
+
 TEST(enter_command, desktop)
 {
     string content[MAX_NO_OF_WORDS];

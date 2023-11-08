@@ -12,6 +12,8 @@ enum Action {Encrypt, Decrypt} ;
 int seed = 0 ;
 set <string> dictionary;
 
+// Decryption algorithm on line 150
+
 void initialize_words (set<string>& dictionary)
 {
     assert(true);
@@ -39,7 +41,7 @@ bool word_exists(string word, set<string> dictionary) {
 
 }
 
-bool file_valid(string file, set<string> dictionary, double precision = 0.5, double cancelthreshold = 0.1) {
+bool file_valid(string file, set<string> dictionary, double precision = 0.5, double cancelthreshold = 0.2) {
 
     assert(precision >= 0 && precision <= 1 && cancelthreshold > 0 && cancelthreshold <= 1 && file.length() > 0 && !dictionary.empty());
     // post-condition
@@ -47,7 +49,8 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5, dou
     // It returns false when it finds any characters that shouldn't be in the final file or not enough of the words are in the word list.
     // This is the word list we used: https://www.mit.edu/~ecprice/wordlist.10000
 
-    int words, correct = 0;
+    int words = 0;
+    int correct = 0;
     int num = 0;
     char c;
     string word;
@@ -67,6 +70,10 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5, dou
         if (num > 1) {
             words ++;
             word = file.substr(0, num);
+
+            if (!isalnum(word[num-1])) { // removes a potential non-alphanumeric character after a word
+                word = word.substr(0, num-1);
+            }
             
 
             if (word_exists(word, dictionary)) {
@@ -75,17 +82,20 @@ bool file_valid(string file, set<string> dictionary, double precision = 0.5, dou
         }
         file.erase(0, num);
 
-        if (static_cast<double> (file.length()) / static_cast<double> (totallength) < 1 - cancelthreshold &&
-            static_cast<double> (correct) / static_cast<double> (words)  < precision) {
-                break;
+        // Below code assumes that if a certain portion of the file is nonsense, the whole file will be
+        // This speeds up the decryption a bit, since it only checks part of wrong solutions
+        if (static_cast<double> (file.length()) / static_cast<double> (totallength) < 1 - cancelthreshold) {
+            if (static_cast<double> (correct) / static_cast<double> (words)  < precision) {
+                return false;
             }
+        }
     }
-    // cout << (static_cast<double> (correct) / static_cast<double> (words)) << endl; 
-    if (static_cast<double> (correct) / static_cast<double> (words)  <= precision) {
-        return true;
-    }
-    else {
-        return false;
+
+        if (static_cast<double> (correct) / static_cast<double> (words)  > precision) {
+            return true;
+        }
+        else {
+            return false;
     }
 }
 
@@ -127,8 +137,16 @@ char rotate_char (char a, int r)
         return a;
     }
     else {
-        // I am 70% certain that the inverse of the encryption function is the function itself
-        // Do not hesitate to check that though
+        // No encryption algorithm since not necessary
+        /* Decryption algorithm
+          _    _ ______ _____  ______ 
+        | |  | |  ____|  __ \|  ____|
+        | |__| | |__  | |__) | |__   
+        |  __  |  __| |  _  /|  __|  
+        | |  | | |____| | \ \| |____ 
+        |_|  |_|______|_|  \_\______|
+        unless you are looking for the full loop, which is on line 176
+        */
         b = (((a - 32) - (r % (128 - 32))) + 128 - 32) % (128 - 32) + 32;
         return b;
     }
@@ -155,7 +173,7 @@ void decrypt(ifstream& infile, ostringstream& outstr, int initial_value) {
     
 }
 
-int brute_force_decrypt(string infilename, string outfilename) {
+int brute_force_decrypt(string infilename) {
     assert(true);
     // Post-condition
     // This function brute-forces the decryption by trying decryptig with every random seed 
@@ -163,60 +181,34 @@ int brute_force_decrypt(string infilename, string outfilename) {
     // When it thinks it's a proper text, it writes the text to a file and returns the seed r
 
     for (int r = 1; r <= 655535; r++) { // This is the range the random seed is supposed to be in
-        cout << r << ": ";
         ifstream infile(infilename, ios_base::binary);
         ostringstream out("", ios_base::binary);
         decrypt(infile, out, r); // Decrypts with seed r
         infile.close();
 
-        if (file_valid(out.str(), dictionary, 0.8)) { // Checks if at least 20% of the word are in word list  
-            cout << "valid" << endl;
+        if (file_valid(out.str(), dictionary, 0.5, 0.5)) { // Checks if at least 50% of the word are in word list  
+            cout << r << ": valid" << endl;
+            cout << out.str() << endl;
             ofstream outf("source.txt", ios_base::binary); // Opens output file if the decryption is valid
             outf << out.str();
             outf.close();
             return r;
         } else {
-            cout << "invalid" << endl;
+            if (r % 100 == 0) {
+                cout << "Checked " << r << " options." << endl;
+            }
         }
     }
 }
 
-int brute_force_decrypt(string infilename, string outfilename) {
-    assert(true);
-    // Post-condition
-    // This function brute-forces the decryption by trying decryptig with every random seed 
-    // And checking with a 10000 word database if the resulting file is a proper english text,
-    // When it thinks it's a proper text, it writes the text to a file and returns the seed r
-
-    for (int r = 1; r <= 655535; r++) { // This is the range the random seed is supposed to be in
-        cout << r << ": ";
-        ifstream infile(infilename, ios_base::binary);
-        ostringstream out("", ios_base::binary);
-        decrypt(infile, out, r); // Decrypts with seed r
-        infile.close();
-
-        if (file_valid(out.str(), dictionary, 0.8)) { // Checks if at least 20% of the word are in word list  
-            cout << "valid" << endl;
-            ofstream outf("source.txt", ios_base::binary); // Opens output file if the decryption is valid
-            outf << out.str();
-            outf.close();
-            return r;
-        } else {
-            cout << "invalid" << endl;
-        }
-    }
-}
 
 #ifndef TESTING
 int main (int argc, char* argv[])
 {
     initialize_words(dictionary);
-    for (int r = 1; r < 65536; r += 1) {
-        initialise_pseudo_random(r);
-        if ((next_pseudo_random_number() - next_pseudo_random_number())%128 == -11100%128) {
-            cout << r;
-        }
-    }
+    
+    brute_force_decrypt("secret.txt");
+
     return 0;
 }
 #endif
