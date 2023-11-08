@@ -100,7 +100,30 @@ void show_track (Track track, TrackDisplay lt, ostream& os)
 /*  Postcondition:
     only the members of track are shown for which the corresponding member in lt is true.
 */
-    // implement this function
+    if (lt.showArtist) {
+        os << track.artist << endl;
+    }
+    if (lt.showAlbum) {
+        os << track.cd << endl;
+    }
+    if (lt.showYear) {
+        os << track.year << endl;
+    }
+    if (lt.showTrack) {
+        os << track.track << endl;
+    }
+    if (lt.showTitle) {
+        os << track.title << endl;
+    }
+    if (lt.showTags) {
+        os << track.tags << endl;
+    }
+    if (lt.showLength) {
+        os << track.time << endl;
+    }
+    if (lt.showCountry) {
+        os << track.country << endl;
+    }
 }
 
 istream& operator>> (istream& in, Track& track)
@@ -110,8 +133,25 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
-    // implement this function
+    getline(in, track.artist);
+    getline(in, track.cd);
+    in >> track.year;
+    in >> track.track;
+    getline(in, track.title);
+    getline(in, track.tags);
+    in >> track.time;
+    getline(in, track.country);
     return in;
+}
+
+bool string_in_vector(const vector<string>& vec, string val) {
+    assert(true);
+
+    for (int i = 0; i < ssize(vec); i++) {
+        if (vec.at(i) == val)
+            return true;
+    }
+    return false;
 }
 
 int match_tracks (const vector<Track>& tracks, string track, bool display)
@@ -121,8 +161,16 @@ int match_tracks (const vector<Track>& tracks, string track, bool display)
     return value is the number of tracks in `tracks` that have a title matching `title`
     if `display` is true, all matched tracks have been printed to `cout`
 */
-    // implement this function
-    return 0;
+    int num = 0;
+    TrackDisplay lt = {true, true, true, true, true, true, true, true};
+    for (int i = 0; i < ssize(tracks); i++) {
+        if (match(track, tracks.at(i).title)) {
+            if (display)
+                show_track(tracks.at(i), lt, cout);
+            num++;
+        }
+    }
+    return num;
 }
 
 int match_artists (const vector<Track>& tracks, string artist, bool display)
@@ -132,8 +180,19 @@ int match_artists (const vector<Track>& tracks, string artist, bool display)
     return value is the number of tracks in `tracks` that have an artist matching `artist`, where each artist is only matched once
     if `display` is true, all matched tracks have been printed to `cout`
 */
-    // implement this function
-    return 0;
+
+    int num = 0;
+    TrackDisplay lt = {true};
+    vector<string> artists;
+    for (int i = 0; i < ssize(tracks); i++) {
+        if (match(artist, tracks.at(i).artist) && !string_in_vector(artists, tracks.at(i).artist)) {
+            artists.push_back(tracks.at(i).artist);
+            if (display)
+                show_track(tracks.at(i), lt, cout);
+            num++;
+        }
+    }
+    return num;
 }
 
 int match_cds (const vector<Track>& tracks, string artist, bool display)
@@ -143,8 +202,19 @@ int match_cds (const vector<Track>& tracks, string artist, bool display)
     return value is the number of tracks in `tracks` that have an artist matching `artist`, where each (artist, cd) pair is only matched once
     if `display` is true, all matched tracks have been printed to `cout`
 */
-    // implement this function
-    return 0;
+    int num = 0;
+    TrackDisplay lt = {true, true, true};
+    vector<string> cds;
+    for (int i = 0; i < ssize(tracks); i++) {
+        if (match(artist, tracks.at(i).artist) && !string_in_vector(cds, tracks.at(i).cd)) {
+            if (display)
+                show_track(tracks.at(i), lt, cout);
+            num++;
+            cds.push_back(tracks.at(i).cd);
+            cout << "HI" << endl;
+        }
+    }
+    return num;
 }
 
 int number_of_cds (const vector<Track>& tracks)
@@ -153,8 +223,14 @@ int number_of_cds (const vector<Track>& tracks)
 /*  Postcondition:
     return value is the number of tracks in `tracks` that have an unique (artist, cd) pair, where each pair is counted once
 */
-    // implement this function
-    return 0;
+    vector<string> seen_tracks;
+    for(int i = 0; i < ssize(tracks); i++) {
+        if(!string_in_vector(seen_tracks, tracks.at(i).cd)) {
+            seen_tracks.push_back(tracks.at(i).cd);
+        }
+    }
+    
+    return ssize(seen_tracks);
 }
 
 int read_tracks (string filename, vector<Track>& tracks, bool show_content)
