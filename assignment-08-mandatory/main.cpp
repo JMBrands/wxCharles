@@ -51,7 +51,13 @@ ostream& operator<< (ostream& out, const Length length)
 /*  Postcondition:
     the value of length is shown via out in the format: minutes, ':', seconds (two digits)
 */
-    // implement this function
+    string seconds;
+    if (length.seconds < 10) {
+        out << length.minutes << ":0" << length.seconds;
+    } else {
+        out << length.minutes << ':' << length.seconds;
+    }
+
     return out;
 }
 
@@ -61,7 +67,12 @@ istream& operator>> (istream& in, Length& length)
 /*  Postcondition:
     the value of length has been read from in: first minutes, then ':', then seconds
 */
-    // implement this function
+    int minutes, seconds;
+    char colon;
+    in >> minutes >> colon >> seconds;
+    if (colon == ':')
+        length = {minutes, seconds};
+
     return in;
 }
 
@@ -71,8 +82,16 @@ Length operator+ (const Length& a, const Length& b)
 /*  Postcondition:
     Result is the sum of a and b.
 */
-    // implement this function
-    return {};
+    int minutes, seconds;
+
+    minutes = a.minutes + b.minutes;
+    seconds = a.seconds + b.seconds;
+    if (seconds >= 60) {
+        minutes++;
+        seconds -= 60;
+    }
+
+    return {minutes, seconds};
 }
 
 void show_track (Track track, TrackDisplay lt, ostream& os)
