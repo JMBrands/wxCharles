@@ -133,24 +133,27 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
-    string temp;
+    string temp; // temp is used to remove trailing endlines from te buffer after in >> is used.
     getline(in, track.artist);
     getline(in, track.cd);
     in >> track.year;
     in >> track.track;
-    getline(in, temp);
+    getline(in, temp); // removes trailing \n so the next getline works
     getline(in, track.title);
     getline(in, track.tags);
     in >> track.time;
-    getline(in, temp);
+    getline(in, temp); // removes trailing \n so the next getline works
     getline(in, track.country);
     getline(in, temp);
-    show_track(track, {true, true, true, true, true, true, true, true}, cout);
     return in;
 }
 
 bool string_in_vector(const vector<string>& vec, string val) {
     assert(true);
+/*  Postcondition:
+    This this function uses linear search to find string val in vector vec,
+    If it finds val in vec, it returns true, otherwise it returns false.
+*/
 
     for (int i = 0; i < ssize(vec); i++) {
         if (vec.at(i) == val)
@@ -246,8 +249,24 @@ int read_tracks (string filename, vector<Track>& tracks, bool show_content)
     is the number of tracks that have been read.
     Only if show_content, then all read tracks are shown on screen.
 */
-    // implement this function
-    return 0;
+    int num_of_tracks = 0;
+    ifstream input(filename);
+    TrackDisplay lt = {true, true, true, true, true, true, true, true};
+
+    while (!input.fail()) {
+        Track in;
+        input >> in;
+        
+        if (!input.fail()) {
+            tracks.push_back(in);
+            if (show_content) {
+                show_track(tracks.at(ssize(tracks)-1), lt, cout);
+            }
+            num_of_tracks ++;
+        }
+    }
+
+    return num_of_tracks;
 }
 
 #ifndef TESTING
