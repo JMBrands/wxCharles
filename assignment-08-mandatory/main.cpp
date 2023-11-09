@@ -133,6 +133,7 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
+    string disposable;
     getline(in, track.artist);
     getline(in, track.cd);
     in >> track.year;
@@ -141,6 +142,9 @@ istream& operator>> (istream& in, Track& track)
     getline(in, track.tags);
     in >> track.time;
     getline(in, track.country);
+    while(!in.eof()) {
+        in.ignore();
+    }
     return in;
 }
 
