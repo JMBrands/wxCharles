@@ -133,14 +133,19 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
+    string temp;
     getline(in, track.artist);
     getline(in, track.cd);
     in >> track.year;
     in >> track.track;
+    getline(in, temp);
     getline(in, track.title);
     getline(in, track.tags);
     in >> track.time;
+    getline(in, temp);
     getline(in, track.country);
+    getline(in, temp);
+    show_track(track, {true, true, true, true, true, true, true, true}, cout);
     return in;
 }
 
