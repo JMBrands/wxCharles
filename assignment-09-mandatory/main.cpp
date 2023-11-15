@@ -217,8 +217,7 @@ bool is_sorted (const vector<El>& data, Slice s)
     result is true if data.at(first (s)) <= data.at(first (s) + 1) ... data.at(last(s)-1) <= data.at(last(s))
 */
     int i;
-    for (i = s.from; i < s.from+s.length; i++) {
-        cout << i - s.from << ";" << data.at(i) << ";" << data.at(i+1) << (data.at(i) > data.at(i + 1)) << endl;
+    for (i = first(s); i < last(s); i++) {
         if (data.at(i) > data.at(i + 1)) {
             return false;
         }
@@ -239,7 +238,14 @@ void insert (vector<El>& data, Slice s)
 /*  Postcondition:
     data.at (last (s)+1) is moved in data.at (first (s))...data.at (last (s)+1) and is_sorted (data, make_slice (s.from s.length+1))
 */
-
+    Track key = data.at(last(s) + 1);
+    int i;
+    for (i = last(s); key < data.at(i) && i >= first(s); i--) {
+        cout << i << endl;
+        data.at(i + 1) = data.at(i);
+    }
+    cout << i << endl;
+    data.at(static_cast<int>(i + 1)) = key;
 }
 
 void insertion_sort(vector<El>& data)
@@ -306,7 +312,7 @@ void bubble_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    Slice slice = {0, static_cast<int>(data.size())};
+    Slice slice = {0, static_cast<int>(ssize(data))};
     bool running = true;
     do {
         running = bubble(data, slice);
