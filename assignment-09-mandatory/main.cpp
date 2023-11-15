@@ -149,8 +149,8 @@ bool operator== (const Track& a, const Track& b)
 /*  Postcondition:
     returns true only if all selector values of a are equal to their counterparts of b
 */
-    // implement this function
-    return false;
+    return (a.artist == b.artist && a.cd == b.cd && a.year == b.year && a.track == b.track);
+    
 }
 
 bool operator!= (const Track& a, const Track& b)
@@ -168,8 +168,21 @@ bool operator< (const Track& a, const Track& b)
 /*  Postcondition:
     check the assignment for the proper definition of < on Tracks
 */
-    // implement this function
-    return false;
+    if (b.artist > a.artist) {
+        return false;
+    }
+    else if (b.cd > a.cd) {
+        return false;
+    }
+    else if (b.year > a.year) {
+        return false;
+    }
+    else if (b.track >= a.track) {
+        return false;
+    }
+    else{
+        return true;
+    }
 }
 
 bool operator>(const Track& a, const Track& b)
@@ -271,8 +284,16 @@ bool bubble (vector<El>& data, Slice unsorted)
     immediate pairs in data with slice unsorted are swapped if left element is larger than right element, and result is
     true only if this is done at least once (don't forget to implement operator< and operator==)
 */
-    // implement this function
-    return false;
+    int i;
+    bool swapped = false
+    for (i = unsorted.from; i < unsorted.from + unsorted.length - 1; i++) {
+        if (data[i] > data[i+1]) {
+            data.at(i), data.at(i+1) = data.at(i+1), data.at(i);
+            swapped = true;
+        }
+    }
+
+    return swapped;
 }
 
 void bubble_sort(vector<El>& data)
@@ -281,7 +302,7 @@ void bubble_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // implement this function
+    Slice complete_slice = 
 }
 
 /**********************************************************************************************************
