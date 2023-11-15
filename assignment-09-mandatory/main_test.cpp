@@ -106,17 +106,17 @@ TEST(operators, track_equals3)
     EXPECT_NE(TEST_DB[40], TEST_DB[13]);
 }
 
-TEST(operators, track_less_then1)
+TEST(operators, track_less_than1)
 {
     EXPECT_LT(TEST_DB[4], TEST_DB[1]);
 }
 
-TEST(operators, track_less_then2)
+TEST(operators, track_less_than2)
 {
     EXPECT_LT(TEST_DB[11], TEST_DB[12]);
 }
 
-TEST(operators, track_less_then3)
+TEST(operators, track_less_than3)
 {
     EXPECT_LT(TEST_DB[22], TEST_DB[23]);
 }

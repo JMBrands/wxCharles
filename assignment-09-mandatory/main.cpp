@@ -168,20 +168,35 @@ bool operator< (const Track& a, const Track& b)
 /*  Postcondition:
     check the assignment for the proper definition of < on Tracks
 */
-    if (b.artist > a.artist) {
-        return false;
-    }
-    else if (b.cd > a.cd) {
-        return false;
-    }
-    else if (b.year > a.year) {
-        return false;
-    }
-    else if (b.track >= a.track) {
-        return false;
-    }
-    else{
+    if (a.artist < b.artist) {
         return true;
+    }
+    else if (a.artist > b.artist) {
+        return false;
+    }
+    else {
+        if (a.cd < b.cd) {
+            return true;
+        }
+        else if (a.cd > b.cd) {
+            return false;
+        }
+        else {
+            if (a.year < b.year) {
+                return true;
+            }
+            else if (a.year > b.year) {
+                return false;
+            }
+            else {
+                if (a.track < b.track) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
     }
 }
 
@@ -285,10 +300,10 @@ bool bubble (vector<El>& data, Slice unsorted)
     true only if this is done at least once (don't forget to implement operator< and operator==)
 */
     int i;
-    bool swapped = false
+    bool swapped = false;
     for (i = unsorted.from; i < unsorted.from + unsorted.length - 1; i++) {
-        if (data[i] > data[i+1]) {
-            data.at(i), data.at(i+1) = data.at(i+1), data.at(i);
+        if (data.at(i) > data.at(i+1)) {
+            swap(data.at(i),data.at(i+1));
             swapped = true;
         }
     }
@@ -302,7 +317,13 @@ void bubble_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    Slice complete_slice = 
+    Slice slice = {0, static_cast<int>(data.size())};
+    bool running = true;
+    do {
+        running = bubble(data, slice);
+        slice.length --;
+    }
+    while (running);
 }
 
 /**********************************************************************************************************
