@@ -171,33 +171,16 @@ bool operator< (const Track& a, const Track& b)
     if (a.artist < b.artist) {
         return true;
     }
-    else if (a.artist > b.artist) {
-        return false;
+    if (a.cd < b.cd && a.artist == b.artist) {
+        return true;
     }
-    else {
-        if (a.cd < b.cd) {
-            return true;
-        }
-        else if (a.cd > b.cd) {
-            return false;
-        }
-        else {
-            if (a.year < b.year) {
-                return true;
-            }
-            else if (a.year > b.year) {
-                return false;
-            }
-            else {
-                if (a.track < b.track) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-        }
+    if (a.year < b.year && a.cd == b.cd && a.artist == b.artist) {
+        return true;
     }
+    if (a.track < b.track && a.year == b.year && a.cd == b.cd && a.artist == b.artist) {
+        return true;
+    }
+    return false;
 }
 
 bool operator>(const Track& a, const Track& b)
@@ -233,8 +216,14 @@ bool is_sorted (const vector<El>& data, Slice s)
 /*  post-condition:
     result is true if data.at(first (s)) <= data.at(first (s) + 1) ... data.at(last(s)-1) <= data.at(last(s))
 */
-    // implement this function
-    return false;
+    int i;
+    for (i = s.from; i < s.from+s.length; i++) {
+        cout << i - s.from << ";" << data.at(i) << ";" << data.at(i+1) << (data.at(i) > data.at(i + 1)) << endl;
+        if (data.at(i) > data.at(i + 1)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**********************************************************************************************************
@@ -250,7 +239,7 @@ void insert (vector<El>& data, Slice s)
 /*  Postcondition:
     data.at (last (s)+1) is moved in data.at (first (s))...data.at (last (s)+1) and is_sorted (data, make_slice (s.from s.length+1))
 */
-    // implement this function
+
 }
 
 void insertion_sort(vector<El>& data)
