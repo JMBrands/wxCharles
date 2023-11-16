@@ -253,7 +253,7 @@ void insertion_sort(vector<El>& data)
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
     int i;
-    for (i = 1; i < ssize(data); i++) {
+    for (i = 0; i < ssize(data); i++) {
         insert(data, make_slice(0, i));
     }
 }
