@@ -241,10 +241,8 @@ void insert (vector<El>& data, Slice s)
     Track key = data.at(last(s) + 1);
     int i;
     for (i = last(s); i >= first(s) && key < data.at(i); i--) {
-        cout << "test 1:" << i << endl;
         data.at(i + 1) = data.at(i);
     }
-    cout << "test 2: " << i << endl;
     data.at(static_cast<int>(i + 1)) = key;
 }
 
@@ -254,7 +252,10 @@ void insertion_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // implement this function
+    int i;
+    for (i = 1; i < ssize(data); i++) {
+        insert(data, make_slice(0, i));
+    }
 }
 
 /**********************************************************************************************************
