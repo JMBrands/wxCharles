@@ -270,8 +270,16 @@ int max_value_at (const vector<El>& data, Slice s)
 /*  Postcondition:
     data.at (result) is the maximum of every element in data.at (first (s)) ... data.at (last (s))
 */
-    // implement this function
-    return 0;
+    int max_index = first(s);
+    int i;
+    for (i = first(s); i <= last(s); i++) {
+        if (data.at(i) > data.at(max_index)) {
+            max_index = i;
+        }
+        cout << i << endl;
+    }
+    cout << max_index << endl << endl;
+    return max_index;
 }
 
 void selection_sort(vector<El>& data)
@@ -280,7 +288,12 @@ void selection_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // implement this function
+    int j, index;
+    Track temp;
+    for (j = 0; j < ssize(data); j++) {
+        index = max_value_at(data, make_slice(0, ssize(data) - j));
+        swap(data.at(ssize(data) - j - 1), data.at(index));
+    }
 }
 
 /**********************************************************************************************************
