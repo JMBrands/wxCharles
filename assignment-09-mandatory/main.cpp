@@ -378,23 +378,29 @@ bool is_a_heap (const vector<El>& data, Slice s)
     result is true only if all existing children in slice s of data have a value that is not greater than their parent
 */
     for (int i = s.from; i < s.from + s.length; i++) {
-        if (parent(i) < s.from) {
-            continue;
-        }
         if (data.at(i) > data.at(parent(i))) {
             return false;
         }
     }
+    return true;
     
 }
 
 void push_up ( vector<El>& data, int elem )
 {// Precondition:
-    assert (0 <= elem && elem < ssize (data) && is_a_heap (data, make_slice (0,elem)));
+    assert (0 <= elem && elem < ssize (data));
+    assert(is_a_heap (data, make_slice (0,elem)));
 /*  Postcondition:
     is_a_heap (data, make_slice (0, elem+1))
 */
-    // implement this function
+    //cout << "parent: " << data.at(parent(elem)) << endl;
+    //cout << "self: " << data.at(elem) << endl;
+    bool swapping = data.at(elem) > data.at(parent(elem));
+    while (swapping) {
+        swap(data.at(parent(elem)), data.at(elem));
+        elem = parent(elem);
+        swapping = data.at(elem) > data.at(parent(elem));
+    }
 }
 
 void build_heap ( vector<El>& data )
@@ -403,7 +409,10 @@ void build_heap ( vector<El>& data )
 /*  Postcondition:
     is_a_heap (data, make_slice (0, ssize (data)))
 */
-    // implement this function
+    Slice slice = { 0, 2 };
+    for (int i = 1; i < ssize(data); i++) {
+        push_up(data, i);
+    }
 }
 
 bool largest_child (const vector<El>& data, int parent, int unsorted, El& child, int& which)
@@ -414,8 +423,25 @@ bool largest_child (const vector<El>& data, int parent, int unsorted, El& child,
     result is true only if the element at parent in data has one or two unsorted child elements;
     only in that case the value of the largest child is child and its index position is which
 */
-    // implement this function
-    return false;
+    int largest = 0;
+    int left = left_child(parent);
+    int right = right_child(parent);
+    if (left > unsorted) {
+        return false;
+    }
+    if (right > unsorted) {
+        child = data.at(left);
+        which = left;
+    }
+    else if (data.at(left) > data.at(right)) {
+        child = data.at(left);
+        which = left;
+    }
+    else {
+        child = data.at(right);
+        which = right;
+    }
+    return true;
 }
 
 void push_down (vector<El>& data, int unsorted)
@@ -424,7 +450,7 @@ void push_down (vector<El>& data, int unsorted)
 /*  Postcondition:
     is_a_heap (data, make_slice (0,unsorted+1))
 */
-    // implement this function
+    
 }
 
 void pick_heap (vector<El>& data)
