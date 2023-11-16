@@ -240,11 +240,11 @@ void insert (vector<El>& data, Slice s)
 */
     Track key = data.at(last(s) + 1);
     int i;
-    for (i = last(s); key < data.at(i) && i >= first(s); i--) {
-        cout << i << endl;
+    for (i = last(s); i >= first(s) && key < data.at(i); i--) {
+        cout << "test 1:" << i << endl;
         data.at(i + 1) = data.at(i);
     }
-    cout << i << endl;
+    cout << "test 2: " << i << endl;
     data.at(static_cast<int>(i + 1)) = key;
 }
 
@@ -377,8 +377,15 @@ bool is_a_heap (const vector<El>& data, Slice s)
 /*  Postcondition:
     result is true only if all existing children in slice s of data have a value that is not greater than their parent
 */
-    // implement this function
-    return false;
+    for (int i = s.from; i < s.from + s.length; i++) {
+        if (parent(i) < s.from) {
+            continue;
+        }
+        if (data.at(i) > data.at(parent(i))) {
+            return false;
+        }
+    }
+    
 }
 
 void push_up ( vector<El>& data, int elem )
