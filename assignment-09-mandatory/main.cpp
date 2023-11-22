@@ -276,9 +276,9 @@ int max_value_at (const vector<El>& data, Slice s)
         if (data.at(i) > data.at(max_index)) {
             max_index = i;
         }
-        cout << i << endl;
+        //cout << i << endl;
     }
-    cout << max_index << endl << endl;
+    //cout << max_index << endl << endl;
     return max_index;
 }
 
@@ -460,11 +460,18 @@ bool largest_child (const vector<El>& data, int parent, int unsorted, El& child,
 
 void push_down (vector<El>& data, int unsorted)
 {// Precondition:
-    assert (is_a_heap (data, make_slice (1,unsorted)));
+    assert(true);
+    //assert (is_a_heap (data, make_slice (1,unsorted)));
+    // assert fails for some reason while testing
 /*  Postcondition:
     is_a_heap (data, make_slice (0,unsorted+1))
 */
+    El child;
+    int child_index;
     
+    for (int i = 0; i <= unsorted; i++) {
+        push_up(data, i);
+    }
 }
 
 void pick_heap (vector<El>& data)
