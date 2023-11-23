@@ -495,6 +495,7 @@ void pick_heap (vector<El>& data)
         swap(data.at(i-1), data.at(0));
         push_down(data, i-2);
     }
+    swap(data.at(1), data.at(0));
 }
 
 void heap_sort(vector<El>& data)
@@ -503,7 +504,8 @@ void heap_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement < and ==)
 */
-    // implement this function
+    build_heap(data);
+    pick_heap(data);
 }
 
 /**********************************************************************************************************
