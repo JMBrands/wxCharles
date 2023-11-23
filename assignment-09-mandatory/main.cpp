@@ -468,10 +468,21 @@ void push_down (vector<El>& data, int unsorted)
 */
     El child;
     int child_index;
-    
-    for (int i = 0; i <= unsorted; i++) {
-        push_up(data, i);
+    int current_index = 0;
+
+    do {
+        if (!largest_child(data, current_index, unsorted, child, child_index)) {
+            break;
+        }
+        if (child > data.at(current_index)) {
+            swap(data.at(child_index), data.at(current_index));
+            current_index = child_index;
+        }
+        else {
+            break;
+        }
     }
+    while (current_index < unsorted);
 }
 
 void pick_heap (vector<El>& data)
@@ -480,7 +491,10 @@ void pick_heap (vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement < and ==)
 */
-    // implement this function
+    for (int i = data.size(); i > 2; i--) {
+        swap(data.at(i-1), data.at(0));
+        push_down(data, i-2);
+    }
 }
 
 void heap_sort(vector<El>& data)
