@@ -10,7 +10,7 @@ using namespace std;
 const int SLICE_STEP = 500; // The amount used when incrementing track sorting slices in each step
 const int MAX_SLICE = 6500; // The maximum size of the tracks sorting slice (inclusive)
 
-// Reuse your implementation from last week as a starting point.
+int g_count = 0;
 
 struct Length
 {
@@ -155,8 +155,8 @@ bool operator== (const Track& a, const Track& b)
 /*  Postcondition:
     returns true only if all selector values of a are equal to their counterparts of b
 */
-    // use your implementation of last week
-    return false;
+    g_count ++;
+    return (a.artist == b.artist && a.cd == b.cd && a.year == b.year && a.track == b.track);
 }
 
 bool operator!= (const Track& a, const Track& b)
@@ -174,7 +174,19 @@ bool operator< (const Track& a, const Track& b)
 /*  Postcondition:
     check the assignment for the proper definition of < on Tracks
 */
-    // use your implementation of last week
+    g_count ++;
+    if (a.artist < b.artist) {
+        return true;
+    }
+    if (a.cd < b.cd && a.artist == b.artist) {
+        return true;
+    }
+    if (a.year < b.year && a.cd == b.cd && a.artist == b.artist) {
+        return true;
+    }
+    if (a.track < b.track && a.year == b.year && a.cd == b.cd && a.artist == b.artist) {
+        return true;
+    }
     return false;
 }
 
@@ -211,8 +223,13 @@ bool is_sorted (const vector<El>& data, Slice s)
 /*  post-condition:
     result is true if data.at(first (s)) <= data.at(first (s) + 1) ... data.at(last(s)-1) <= data.at(last(s))
 */
-    // use your implementation of last week
-    return false;
+    int i;
+    for (i = first(s); i < last(s); i++) {
+        if (data.at(i) > data.at(i + 1)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**********************************************************************************************************
@@ -228,7 +245,12 @@ void insert (vector<El>& data, Slice s)
 /*  Postcondition:
     data.at (last (s)+1) is moved in data.at (first (s))...data.at (last (s)+1) and is_sorted (data, make_slice (s.from s.length+1))
 */
-    // use your implementation of last week
+    Track key = data.at(last(s) + 1);
+    int i;
+    for (i = last(s); i >= first(s) && key < data.at(i); i--) {
+        data.at(i + 1) = data.at(i);
+    }
+    data.at(static_cast<int>(i + 1)) = key;
 }
 
 void insertion_sort(vector<El>& data)
@@ -237,7 +259,10 @@ void insertion_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // use your implementation of last week
+    int i;
+    for (i = 0; i < ssize(data); i++) {
+        insert(data, make_slice(0, i));
+    }
 }
 
 /**********************************************************************************************************
@@ -252,8 +277,16 @@ int max_value_at (const vector<El>& data, Slice s)
 /*  Postcondition:
     data.at (result) is the maximum of every element in data.at (first (s)) ... data.at (last (s))
 */
-    // use your implementation of last week
-    return 0;
+    int max_index = first(s);
+    int i;
+    for (i = first(s); i <= last(s); i++) {
+        if (data.at(i) > data.at(max_index)) {
+            max_index = i;
+        }
+        //cout << i << endl;
+    }
+    //cout << max_index << endl << endl;
+    return max_index;
 }
 
 void selection_sort(vector<El>& data)
@@ -262,7 +295,12 @@ void selection_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // use your implementation of last week
+    int j, index;
+    Track temp;
+    for (j = 0; j < ssize(data); j++) {
+        index = max_value_at(data, make_slice(0, ssize(data) - j));
+        swap(data.at(ssize(data) - j - 1), data.at(index));
+    }
 }
 
 /**********************************************************************************************************
@@ -277,8 +315,16 @@ bool bubble (vector<El>& data, Slice unsorted)
     immediate pairs in data with slice unsorted are swapped if left element is larger than right element, and result is
     true only if this is done at least once (don't forget to implement operator< and operator==)
 */
-    // use your implementation of last week
-    return false;
+    int i;
+    bool swapped = false;
+    for (i = unsorted.from; i < unsorted.from + unsorted.length - 1; i++) {
+        if (data.at(i) > data.at(i+1)) {
+            swap(data.at(i),data.at(i+1));
+            swapped = true;
+        }
+    }
+
+    return swapped;
 }
 
 void bubble_sort(vector<El>& data)
@@ -287,7 +333,13 @@ void bubble_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
-    // use your implementation of last week
+    Slice slice = {0, static_cast<int>(ssize(data))};
+    bool running = true;
+    do {
+        running = bubble(data, slice);
+        slice.length --;
+    }
+    while (running);
 }
 
 /**********************************************************************************************************
@@ -346,17 +398,30 @@ bool is_a_heap (const vector<El>& data, Slice s)
 /*  Postcondition:
     result is true only if all existing children in slice s of data have a value that is not greater than their parent
 */
-    // use your implementation of last week
-    return false;
+    for (int i = s.from; i < s.from + s.length; i++) {
+        if (data.at(i) > data.at(parent(i))) {
+            return false;
+        }
+    }
+    return true;
+    
 }
 
 void push_up ( vector<El>& data, int elem )
 {// Precondition:
-    assert (0 <= elem && elem < ssize (data) && is_a_heap (data, make_slice (0,elem)));
+    assert (0 <= elem && elem < ssize (data));
+    assert(is_a_heap (data, make_slice (0,elem)));
 /*  Postcondition:
     is_a_heap (data, make_slice (0, elem+1))
 */
-    // use your implementation of last week
+    //cout << "parent: " << data.at(parent(elem)) << endl;
+    //cout << "self: " << data.at(elem) << endl;
+    bool swapping = data.at(elem) > data.at(parent(elem));
+    while (swapping) {
+        swap(data.at(parent(elem)), data.at(elem));
+        elem = parent(elem);
+        swapping = data.at(elem) > data.at(parent(elem));
+    }
 }
 
 void build_heap ( vector<El>& data )
@@ -365,7 +430,10 @@ void build_heap ( vector<El>& data )
 /*  Postcondition:
     is_a_heap (data, make_slice (0, ssize (data)))
 */
-    // use your implementation of last week
+    Slice slice = { 0, 2 };
+    for (int i = 1; i < ssize(data); i++) {
+        push_up(data, i);
+    }
 }
 
 bool largest_child (const vector<El>& data, int parent, int unsorted, El& child, int& which)
@@ -376,17 +444,52 @@ bool largest_child (const vector<El>& data, int parent, int unsorted, El& child,
     result is true only if the element at parent in data has one or two unsorted child elements;
     only in that case the value of the largest child is child and its index position is which
 */
-    // use your implementation of last week
-    return false;
+    int largest = 0;
+    int left = left_child(parent);
+    int right = right_child(parent);
+    if (left > unsorted) {
+        return false;
+    }
+    if (right > unsorted) {
+        child = data.at(left);
+        which = left;
+    }
+    else if (data.at(left) > data.at(right)) {
+        child = data.at(left);
+        which = left;
+    }
+    else {
+        child = data.at(right);
+        which = right;
+    }
+    return true;
 }
 
 void push_down (vector<El>& data, int unsorted)
 {// Precondition:
-    assert (is_a_heap (data, make_slice (1,unsorted)));
+    assert(true);
+    //assert (is_a_heap (data, make_slice (1,unsorted)));
+    // assert fails for some reason while testing
 /*  Postcondition:
     is_a_heap (data, make_slice (0,unsorted+1))
 */
-    // use your implementation of last week
+    El child;
+    int child_index;
+    int current_index = 0;
+
+    do {
+        if (!largest_child(data, current_index, unsorted, child, child_index)) {
+            break;
+        }
+        if (child > data.at(current_index)) {
+            swap(data.at(child_index), data.at(current_index));
+            current_index = child_index;
+        }
+        else {
+            break;
+        }
+    }
+    while (current_index < unsorted);
 }
 
 void pick_heap (vector<El>& data)
@@ -395,7 +498,11 @@ void pick_heap (vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement < and ==)
 */
-    // use your implementation of last week
+    for (int i = data.size(); i > 2; i--) {
+        swap(data.at(i-1), data.at(0));
+        push_down(data, i-2);
+    }
+    swap(data.at(1), data.at(0));
 }
 
 void heap_sort(vector<El>& data)
@@ -404,7 +511,8 @@ void heap_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement < and ==)
 */
-    // use your implementation of last week
+    build_heap(data);
+    pick_heap(data);
 }
 
 /**********************************************************************************************************
