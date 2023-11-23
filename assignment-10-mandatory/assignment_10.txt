@@ -1,0 +1,27 @@
+Part 1
+(a) The worst case scenario is when inputfile has a length of at least N^3,
+    which means the function will execute completely, and write
+    N^3 times, so O(N^3)
+
+(b) In the worst case scenario inputfile will be at least L*M*N long,
+    which means the function will execute completely, and take
+    L*M*N operation, so O(LMN)
+
+(c) In the worst case this doesn't find anything and increases i
+    a total of text.length() times, so O(text.length())
+
+(d) In the worstcase this doesn't find anything and increases i
+    a total of strlen(text) times, so O(strlen(text))
+
+(e) In the worst case x is a prime, which means the for loop runs
+    sqrt(x)-2 times (technically static_cast<int>(sqrt(statix_cast<double>(x)))
+    but this results in the same), so O(sqrt(x))
+
+(f) This will run length times, meaning O(length)
+
+(g) This will run length times or size(source) times, so O(length) or O(size(source))
+
+(h) The outer loop will run n times and the inner loop will then run N times, 
+    N is incremented in every outer loop and it starts at size(source), so O(n*(size(source)+0.5*n))
+
+(i) There is no loop, so the function will run once, so O(1)
