@@ -25,3 +25,5 @@ Part 1
     N is incremented in every outer loop and it starts at size(source), so O(n*(size(source)+0.5*n))
 
 (i) There is no loop, so the function will run once, so O(1)
+
+Part 4

@@ -41,8 +41,13 @@ ostream& operator<< (ostream& out, const Length length)
 /*  Postcondition:
     the value of length is shown via out in the format: minutes, ':', seconds (two digits)
 */
+    string seconds;
+    if (length.seconds < 10) {
+        out << length.minutes << ":0" << length.seconds;
+    } else {
+        out << length.minutes << ':' << length.seconds;
+    }
 
-    // use your implementation of last week
     return out;
 }
 
@@ -52,7 +57,12 @@ istream& operator>> (istream& in, Length& length)
 /*  Postcondition:
     the value of length has been read from in: first minutes, then ':', then seconds
 */
-    // use your implementation of last week
+    int minutes, seconds;
+    char colon;
+    in >> minutes >> colon >> seconds;
+    if (colon == ':')
+        length = {minutes, seconds};
+
     return in;
 }
 
@@ -73,7 +83,18 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
-    // use your implementation of last week
+    string temp; // temp is used to remove trailing endlines from te buffer after in >> is used.
+    getline(in, track.artist);
+    getline(in, track.cd);
+    in >> track.year;
+    in >> track.track;
+    getline(in, temp); // removes trailing \n so the next getline works
+    getline(in, track.title);
+    getline(in, track.tags);
+    in >> track.time;
+    getline(in, temp); // removes trailing \n so the next getline works
+    getline(in, track.country);
+    getline(in, temp);
     return in;
 }
 
@@ -295,6 +316,7 @@ void selection_sort(vector<El>& data)
 /*  Postcondition:
     data is sorted in increasing order, according to < and == on El (don't forget to implement operator< and operator==)
 */
+    g_count = 0;
     int j, index;
     Track temp;
     for (j = 0; j < ssize(data); j++) {
@@ -520,6 +542,25 @@ void heap_sort(vector<El>& data)
  * main function:
  *
  *********************************************************************************************************/
+void get_slice(const vector<Track>& source, vector<Track>& dest, Slice sl) {
+    assert(valid_slice(source, sl));
+
+    for(int i = first(sl); i < last(sl); i++) {
+        dest.push_back(source.at(i));
+    }
+}
+
+void output_results(const vector<int>& counts, ofstream& os) {
+    assert(true);
+    // Post-condition
+    /*This outputs all the values in vector counts and outputs them, separated by commas, to os*/
+
+    for (int i = 0; i < ssize(counts); i++) {
+        os << ',' << counts.at(i);
+    }
+    os << endl;
+}
+
 void generate_csv (const vector<Track>& tracks, ofstream& os)
 {// Precondition:
     assert (os.is_open());
@@ -527,7 +568,55 @@ void generate_csv (const vector<Track>& tracks, ofstream& os)
 /*  Postcondition:
     A CSV file has been written to `os` based on measuring the amount of operations needed to sort growing slices of `tracks`
 */
-    // implement this function
+    os << "sorting algorithm,500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500" << endl;
+    
+    vector<int> insertion_counts;
+    for (int n = 500; n <= 6500; n += 500) {
+        g_count = 0;
+        vector<Track> db;
+        Slice sl = make_slice(0, n);
+        get_slice(tracks, db, sl);
+        insertion_sort(db);
+        insertion_counts.push_back(g_count);
+    }
+    os << "insertion sort";
+    output_results(insertion_counts, os);
+
+    vector<int> selection_counts;
+    for (int n = 500; n <= 6500; n += 500) {
+        g_count = 0;
+        vector<Track> db;
+        Slice sl = make_slice(0, n);
+        get_slice(tracks, db, sl);
+        selection_sort(db);
+        selection_counts.push_back(g_count);
+    }
+    os << "selection sort";
+    output_results(selection_counts, os);
+
+    vector<int> bubble_counts;
+    for (int n = 500; n <= 6500; n += 500) {
+        g_count = 0;
+        vector<Track> db;
+        Slice sl = make_slice(0, n);
+        get_slice(tracks, db, sl);
+        bubble_sort(db);
+        bubble_counts.push_back(g_count);
+    }
+    os << "bubble sort";
+    output_results(bubble_counts, os);
+
+    vector<int> heap_counts;
+    for (int n = 500; n <= 6500; n += 500) {
+        g_count = 0;
+        vector<Track> db;
+        Slice sl = make_slice(0, n);
+        get_slice(tracks, db, sl);
+        heap_sort(db);
+        heap_counts.push_back(g_count);
+    }
+    os << "heap sort";
+    output_results(heap_counts, os);
 }
 
 #ifndef TESTING
