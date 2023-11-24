@@ -27,3 +27,32 @@ Part 1
 (i) There is no loop, so the function will run once, so O(1)
 
 Part 4
+insertion sort:
+best: O(n), when the list is already sorted
+worst: O(n^2), when the array is in the reverse order you want it
+average: O(n^2), when the array is neither sorted or in reverse order
+
+order impact: a lot, when the array is sorted, the complexity is O(n), but if the last few elements are not sorted,
+the complexity will be O(n^2) because the small elements are put in the start of the array first, even if they are already sorted.
+
+selection sort:
+best: O(n^2), every case
+worst: O(n^2), every case
+average: O(n^2), every case
+
+order impact: none, selection sort has a fixed complexity of O(n^2)
+
+bubble sort:
+best: O(n), when the list is already sorted
+worst: O(n^2), when the array is in the reverse order you want it
+average: O(n^2), when the array is neither sorted or in reverse order
+
+order impact: a lot, if the array is nearly sorted, it will finish faster, unlike insertion sort,
+the unsorted areas affect the complexity the same in every part of the array.
+
+heap sort:
+best: O(nlog(n)), every case
+worst: O(nlog(n)), every case
+average: O(nlog(n)), every case
+
+order impact: none, heap sort has a fixed complexity of O(nlog(n))
