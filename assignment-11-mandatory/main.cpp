@@ -5,6 +5,9 @@ using namespace std;
 
 int naive_power (int x, int n)
 {
+    assert(true);
+    /* Post-condition
+    */
     if (n > 0) {
         return x * naive_power(x, n - 1);
     }
@@ -13,32 +16,101 @@ int naive_power (int x, int n)
 
 int power (int x, int n)
 {
-    // part 1.2: implement this function and analyze runtime complexity
-    return 0;
+    //
+    if (n % 2 == 0 && n > 2) {
+        return power(power(x, n/2), 2);
+    }
+    if (n > 0) {
+        return x * power(x, n-1);
+    }
+    return 1;
 }
 
 bool palindrome1 (string text, int i, int j)
 {
-    // implement this function
+    if (j - i < 1) {
+        return true;
+    }
+    if (text.at(i) == text.at(j)) {
+        return palindrome1(text, i+1, j-1);
+    }
     return false;
+}
+
+char lower(char c) {
+    if (c > 64 && c < 91) {
+        return c + 32;
+    }
+    return c;
 }
 
 bool palindrome2 (string text, int i, int j)
 {
-    // implement this function
+    if (j - i < 1) {
+        return true;
+    }
+    if (lower(text.at(i)) == lower(text.at(j))) {
+        return palindrome2(text, i+1, j-1);
+    }
     return false;
 }
 
 bool palindrome3 (string text, int i, int j)
 {
-    // implement this function
+    if (j - i < 1 || i > j) {
+        return true;
+    }
+    cout << i << ": " << text.at(i) << " " << j << ": " << text.at(j) << endl;
+    switch (text.at(i)) {
+        case ' ':
+        case '.':
+        case ',':
+        case ':':
+        case ';':
+        case '\'':
+        case '!':
+        case '?':
+        case '-':
+            return palindrome3(text, i + 1, j);
+    }
+    switch (text.at(j)) {
+        case ' ':
+        case '.':
+        case ',':
+        case ':':
+        case ';':
+        case '\'':
+        case '!':
+        case '?':
+        case '-':
+            return palindrome3(text, i, j - 1);
+    }
+    if (lower(text.at(i)) == lower(text.at(j))) {
+        return palindrome3(text, i+1, j-1);
+    }
     return false;
 }
 
 bool match_chars (string chars, int i, string source, int j)
 {
-    // implement this function
-    return false;
+    if (i > 0 || j > 0) {
+        if (i >= ssize(chars) || j >= ssize(source)) {
+            return false;
+        }
+        match_chars(chars.substr(i), 0, source.substr(j), 0);
+    }
+    if (ssize(chars) == 0) {
+        return true;
+    }
+    if (ssize(source) == 0) {
+        return false;
+    }
+    if (chars.at(0)==source.at(0)) {
+        return match_chars(chars.substr(1), 0, source.substr(1), 0);
+    }
+    else {
+        return match_chars(chars, 0, source.substr(1), 0);
+    }
 }
 
 #ifndef TESTING
@@ -47,7 +119,23 @@ int main ()
     // Pre-condition:
     assert(true);
     // Post-condition: user has entered a line of text, and program has printed
-    // return value of all palindrome functions on that line of text
+    
+    string input;
+    cout << "What text do you want to check? " << endl;
+    cin >> input;
+
+    bool type1 = palindrome1(input, 0, ssize(input)-1);
+    bool type2 = palindrome2(input, 0, ssize(input)-1);
+    bool type3 = palindrome3(input, 0, ssize(input)-1);
+
+    if (type1) {
+        cout << input << " is a type 1 palindrome." << endl;
+    }
+    else {
+        cout << input << " is not a type 1 palindrome." << endl;
+    }
+
+
     return 0;
 }
 #endif

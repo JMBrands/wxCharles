@@ -36,9 +36,13 @@ TEST(part1, power_base)
 TEST(part1, power_recursive)
 {
     EXPECT_EQ(power(0, 1), 0);
+    cout << "test 1" << endl;
     EXPECT_EQ(power(0, 4), 0);
+    cout << "test 2" << endl;
     EXPECT_EQ(power(1, 1), 1);
+    cout << "test 3" << endl;
     EXPECT_EQ(power(1, 3), 1);
+    cout << "test 4" << endl;
     EXPECT_EQ(power(-1, 1), -1);
     EXPECT_EQ(power(-1, 2), 1);
     EXPECT_EQ(power(-1, 5), -1);
