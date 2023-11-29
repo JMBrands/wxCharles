@@ -1,0 +1,4 @@
+Exercise 1
+When using gcc, std::__sort will first run heap sort on a part of the data,
+and then run insertion sort on the remaining part.
+
