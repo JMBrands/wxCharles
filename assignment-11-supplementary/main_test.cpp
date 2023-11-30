@@ -1,6 +1,24 @@
 #include "main.cpp"
 #include "gtest/gtest.h"
 
+TEST(simplify_patterns, simplify_dots_n_stars) {
+  vector<string> inputs = {"test.*.*.*hi", "*", "**", "a**", "a**a", "**aa"};
+  vector<string> expected = {"test...*hi", "*", "*", "a*", "a*a", "*aa"};
+  for (int i = 0; i < ssize(inputs); i++) {
+    simplify_pattern(inputs.at(i));
+    EXPECT_EQ(inputs.at(i), expected.at(i));
+  }
+}
+
+TEST(simplify_wildcards, simplify_dots_n_stars) {
+  vector<string> inputs = {"test.*.*.*hi", "*", "**", "a**", "a**a", "**aa", "***.a"};
+  vector<string> expected = {"test...*hi", "*", "*", "a*", "a*a", "*aa", ".*a"};
+  for (int i = 0; i < ssize(inputs); i++) {
+    simplify_wildcards(inputs.at(i), 0);
+    EXPECT_EQ(inputs.at(i), expected.at(i));
+  }
+}
+
 TEST(assignment, desktop)
 {
   EXPECT_TRUE(match_pattern("hu.t", "hurt"));
