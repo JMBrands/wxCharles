@@ -17,7 +17,7 @@ int naive_power (int x, int n)
 
 int power (int x, int n)
 {//precondition
-    assert(n > 1);
+    assert(n >= 0);
 /* post-condition:
     returns the power n of x, with O(log n).
 */
@@ -32,7 +32,7 @@ int power (int x, int n)
 
 bool palindrome1 (string text, int i, int j)
 {
-    assert(i >= 0 && j < ssize(text));
+    assert(i >= 0 && (j < ssize(text) || ssize(text)== 0));
     /* Post-condition
     returns true if j - i < 1, 
     not i == j because then it wouldn't reurn true on strings with an even amount of characters.

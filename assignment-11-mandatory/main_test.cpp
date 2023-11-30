@@ -36,13 +36,9 @@ TEST(part1, power_base)
 TEST(part1, power_recursive)
 {
     EXPECT_EQ(power(0, 1), 0);
-    cout << "test 1" << endl;
     EXPECT_EQ(power(0, 4), 0);
-    cout << "test 2" << endl;
     EXPECT_EQ(power(1, 1), 1);
-    cout << "test 3" << endl;
     EXPECT_EQ(power(1, 3), 1);
-    cout << "test 4" << endl;
     EXPECT_EQ(power(-1, 1), -1);
     EXPECT_EQ(power(-1, 2), 1);
     EXPECT_EQ(power(-1, 5), -1);
@@ -65,6 +61,7 @@ TEST(part2, palindrome1)
     EXPECT_FALSE(palindrome1("lEp?el", 0, 5));
     EXPECT_FALSE(palindrome1("label", 0, 4));
 }
+
 
 TEST(part2, palindrome2)
 {
@@ -119,4 +116,10 @@ TEST(part3, match_characters)
     EXPECT_FALSE(match_chars("abc", 0, "it is a classy bag", 0));
     EXPECT_TRUE(match_chars("perm", 0, "imperative programming", 0));
     EXPECT_FALSE(match_chars("prime", 0, "imperative programming", 0));
+}
+
+TEST(custom, lower) {
+    EXPECT_EQ(lower('A') ,'a');
+    EXPECT_EQ(lower('h'), 'h');
+    EXPECT_EQ(lower('.'), '.');
 }
