@@ -45,7 +45,7 @@ ostream& operator<< (ostream& out, const Store& store) {
 void read_store(istream& store, Store& giftstore) {
     Gift gift;
     while (!store.eof()) {
-        store >> gift;
+        store >> gift; // TODO: make this stop putting random values at the end
         cout << gift << endl;
         giftstore.inventory.push_back(gift);
     }
