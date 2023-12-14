@@ -12,6 +12,15 @@ const char FLAMINGO_ON_RESCUE_CELL = 'F';
 const char RESCUE_CELL = 'x';
 const char UNKNOWN_CELL = '?';
 
+const vector<char> allowedCells{ ICE_CELL, ROCK_CELL, FLAMINGO_CELL, FLAMINGO_ON_RESCUE_CELL, RESCUE_CELL};
+
+const string ICE_CELL_PRINT = "\033[46m ";
+const string ROCK_CELL_PRINT = "\033[47m ";
+const string FLAMINGO_CELL_PRINT = "\033[45m ";
+const string FLAMINGO_ON_RESCUE_CELL_PRINT = "\033[42m ";
+const string RESCUE_CELL_PRINT = "\033[41m ";
+const string RESET_PRINT = "\033[49m";
+
 enum Action
 {
     MoveNorth,
@@ -26,6 +35,11 @@ enum Action
 struct Puzzle
 {
     // TODO: design your puzzle data structure
+    vector<vector<char>> board; // probably temporary
+    int width;
+    int height;
+    int flamingo_x;
+    int flamingo_y;
 };
 
 bool operator== (const Puzzle& lhs, const Puzzle& rhs)
@@ -33,8 +47,13 @@ bool operator== (const Puzzle& lhs, const Puzzle& rhs)
     assert (true);
 /*  Postcondition: return value is true if `lhs` and `rhs` have the same puzzle state
 */
-    // TODO: implement this function
-    return false;
+    if (lhs.board != rhs.board) 
+        return false;
+    
+    if (!(lhs.width == rhs.width && lhs.height == rhs.height))
+        return false;
+
+    return true;
 }
 
 bool operator!= (const Puzzle& lhs, const Puzzle& rhs)
@@ -50,7 +69,13 @@ bool is_solved (const Puzzle& puzzle)
     assert (true);
 /*  Postcondition: return value is true if the flamingo is at the rescue position in `puzzle`
 */
-    // TODO: implement this function
+    for (vector<char> vec : puzzle.board) {
+        for (char i : vec) {
+            if (i == 'F') {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -59,8 +84,40 @@ bool is_solvable (const Puzzle& puzzle)
     assert (true);
 /*  Postcondition: return value is true if the flamingo in `puzzle` is alive
 */
-    // TODO: implement this function
+    bool allowed = false; 
+    for (vector<char> vec : puzzle.board) {
+        for (char i : vec) {
+            if (i == 'F') {
+                return false;
+            }
+            else if (i == 'f') {
+                return true; 
+                //TODO: check for legal moves
+            }
+        }
+    }
+    
     return false;
+}
+
+void print_cell(ostream& os, char cell) {
+    switch (cell) {
+        case ICE_CELL:
+            os << ICE_CELL_PRINT;
+            break;
+        case ROCK_CELL:
+            os << ROCK_CELL_PRINT;
+            break;
+        case FLAMINGO_CELL:
+            os << FLAMINGO_CELL_PRINT;
+            break;
+        case FLAMINGO_ON_RESCUE_CELL:
+            os << FLAMINGO_ON_RESCUE_CELL_PRINT;
+            break;
+        case RESCUE_CELL:
+            os << RESCUE_CELL_PRINT;
+            break;
+    }
 }
 
 ostream& operator<< (ostream& os, const Puzzle& puzzle)
@@ -68,7 +125,14 @@ ostream& operator<< (ostream& os, const Puzzle& puzzle)
     assert (true);
 /*  Postcondition: `puzzle` has been printed to `os`
 */
-    // TODO: implement this function
+    for(vector<char> row : puzzle.board) {
+        for(char cell : row) {
+            print_cell(os, cell);
+        }
+        os << RESET_PRINT;
+        os << endl;
+    } 
+ 
     return os;
 }
 
@@ -77,8 +141,50 @@ bool load_puzzle (const vector<vector<char>>& field, Puzzle& puzzle)
     assert (true);
 /*  Postcondition: return value is true if `field` denotes a valid puzzle, in which case `field` has been parsed into `puzzle`
 */
-    // TODO: implement this function
-    return false;
+    int rowlength = ssize(field.at(0));
+    int amount_of_flamingos = 0;
+    int flamx, flamy;
+    int x = 0;
+    int y = 0;
+    for (vector<char> vec : field) {
+        if (ssize(vec) != rowlength) {
+            cout << "This puzzle is not a rectangle" << endl;
+            return false;
+        }
+        
+        bool allowed = false;
+        for (char i : vec) {
+            allowed = false;
+            for (char comparison : allowedCells) {
+                if (i == comparison) {
+                    allowed = true;
+                }
+            }
+            if (!allowed) {
+                cout << "This puzzle contains an illegal character, namely "  << i << endl;
+                return false;
+            }
+            if (i == FLAMINGO_CELL || i == FLAMINGO_ON_RESCUE_CELL) {
+                amount_of_flamingos ++;
+                flamx = x;
+                flamy = y;
+            }
+            x++;
+        }
+        y++;
+    }
+    if (amount_of_flamingos != 1) {
+        cout <<  "This puzzle contains an illegal amount of flamingos, namely " << amount_of_flamingos << endl;
+        return false;
+    }
+
+    puzzle.board = field;
+    puzzle.width = rowlength;
+    puzzle.height = ssize(field);
+    puzzle.flamingo_x = flamx;
+    puzzle.flamingo_y = flamy;
+
+    return true;
 }
 
 bool read_puzzle (istream& is, Puzzle& puzzle)
@@ -129,6 +235,85 @@ bool open_puzzle (string file, Puzzle& puzzle)
     return true;
 }
 
+void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
+{// Precondition:
+    assert(x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0);
+    assert(x1 < puzzle.width && x2 < puzzle.width && y1 < puzzle.height && y2 < puzzle.height);
+/* Postcondition:
+    swaps the tiles at x1,y1 and x2,y2 */
+
+    swap(puzzle.board.at(y1).at(x1),puzzle.board.at(y2).at(x2));
+
+}
+
+void remove_flamingo(Puzzle& puzzle)
+{// Precondition:
+    assert(puzzle.flamingo_x == 0 || puzzle.flamingo_x == puzzle.width-1 || puzzle.flamingo_y == 0 || puzzle.flamingo_y == puzzle.height-1);
+    //assert(true);
+// Postcondition: the tile the flamingo is on has been replaced by an ice tile
+    puzzle.board.at(puzzle.flamingo_y).at(puzzle.flamingo_x) = ICE_CELL;
+}
+
+bool move_flaming0_once(Puzzle& puzzle, Action action) 
+{// Precondition:
+    assert(static_cast(action) < 4);
+
+    int flamx = puzzle.flamingo_x;
+    int flamy = puzzle.flamingo_y;
+
+    switch (action) {
+        case MoveEast:
+            if (flamx == puzzle.width-1) {
+                remove_flamingo(puzzle);
+                return false;
+            }
+            else {
+                swap_coordinates(puzzle, flamx, flamy, flamx+1, flamy);
+                puzzle.flamingo_x ++;
+            }
+            break;
+        case MoveWest:
+            if (flamx == 0) {
+                remove_flamingo(puzzle);
+                return false;
+            }
+            else {
+                swap_coordinates(puzzle, flamx, flamy, flamx-1, flamy);
+                puzzle.flamingo_x --
+            }
+            break;
+        case MoveSouth:
+            if (flamy == puzzle.height-1) {
+                remove_flamingo(puzzle);
+                return false;
+            }
+            else {
+                swap_coordinates(puzzle, flamx, flamy, flamx, flamy+1);
+                puzzle.flamingo_y ++;
+            }
+            break;
+        case MoveNorth:
+            if (flamy == 0) {
+                remove_flamingo(puzzle);
+                return false;
+            }
+            else {
+                swap_coordinates(puzzle, flamx, flamy, flamx, flamy)-1;
+                puzzle.flamingo_x --
+            }
+            break;
+    }
+    return true;
+}
+
+void move_flamingo(Puzzle& puzzle, Action action)
+{// Precondition:
+    assert(static_cast(action) < 4);
+
+    
+
+}
+
 Action get_action ()
 {// Precondition:
     assert (true);
@@ -165,7 +350,14 @@ int main ()
 */
     string file;
     Puzzle puzzle;
-
+    puzzle = {
+        {
+            {'.','.','.'},
+            {'f','F','x'},           
+            {'r','r','r'},
+        }
+    };
+    //ct << puzzle << endl;
     cout << "Enter file to open: ";
     getline(cin, file);
 
@@ -183,19 +375,10 @@ int main ()
     while((action = get_action()) != Quit) {
         switch(action) {
             case MoveNorth:
-                // TODO: perform puzzle move
-                steps++;
-                break;
             case MoveEast:
-                // TODO: perform puzzle move
-                steps++;
-                break;
             case MoveSouth:
-                // TODO: perform puzzle move
-                steps++;
-                break;
             case MoveWest:
-                // TODO: perform puzzle move
+                
                 steps++;
                 break;
             case Reset:
