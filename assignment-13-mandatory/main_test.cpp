@@ -141,3 +141,26 @@ TEST(move, north)
     move_flamingo(puzzle, MoveNorth);
     EXPECT_EQ(puzzle, expected);
 }
+
+
+TEST(move, full)
+{
+    Puzzle puzzle;
+    Puzzle expected;
+
+    EXPECT_TRUE(load_puzzle(CHALLENGE_1, puzzle));
+    EXPECT_TRUE(load_puzzle(CHALLENGE_1_nes, expected));
+    move_flamingo(puzzle, MoveNorth);
+    move_flamingo(puzzle, MoveEast);
+    move_flamingo(puzzle, MoveSouth);
+    EXPECT_TRUE(is_solved(puzzle));
+    EXPECT_EQ(puzzle, expected);
+}
+
+TEST(remove_flamingo, challenge_1)
+{
+    Puzzle puzzle;
+    EXPECT_TRUE(load_puzzle(CHALLENGE_1, puzzle));
+    remove_flamingo(puzzle);
+    EXPECT_FALSE(is_solvable(puzzle));
+}
