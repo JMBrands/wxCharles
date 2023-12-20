@@ -256,7 +256,7 @@ void remove_flamingo(Puzzle& puzzle)
 
 bool move_flaming0_once(Puzzle& puzzle, Action action) 
 {// Precondition:
-    assert(static_cast(action) < 4);
+    assert(static_cast<int>(action) < 4);
 
     int flamx = puzzle.flamingo_x;
     int flamy = puzzle.flamingo_y;
@@ -279,7 +279,7 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
             }
             else {
                 swap_coordinates(puzzle, flamx, flamy, flamx-1, flamy);
-                puzzle.flamingo_x --
+                puzzle.flamingo_x --;
             }
             break;
         case MoveSouth:
@@ -298,8 +298,8 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
                 return false;
             }
             else {
-                swap_coordinates(puzzle, flamx, flamy, flamx, flamy)-1;
-                puzzle.flamingo_x --
+                swap_coordinates(puzzle, flamx, flamy, flamx, flamy-1);
+                puzzle.flamingo_x --;
             }
             break;
     }
@@ -308,7 +308,7 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
 
 void move_flamingo(Puzzle& puzzle, Action action)
 {// Precondition:
-    assert(static_cast(action) < 4);
+    assert(static_cast<int>(action) < 4);
 
     
 
