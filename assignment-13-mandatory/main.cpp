@@ -13,13 +13,24 @@ const char RESCUE_CELL = 'x';
 const char UNKNOWN_CELL = '?';
 
 const vector<char> allowedCells{ ICE_CELL, ROCK_CELL, FLAMINGO_CELL, FLAMINGO_ON_RESCUE_CELL, RESCUE_CELL};
+// Sets aren't allowed, but definitely the better option, since this is only used for content checking
 
+// We added coloured tiles for linux terminals, and a fallback set for windows
+#ifndef _WIN32 // The first set of values makes the strings colored using CSI codes
 const string ICE_CELL_PRINT = "\033[46m ";
 const string ROCK_CELL_PRINT = "\033[47m ";
 const string FLAMINGO_CELL_PRINT = "\033[45m ";
 const string FLAMINGO_ON_RESCUE_CELL_PRINT = "\033[42m ";
 const string RESCUE_CELL_PRINT = "\033[41m ";
 const string RESET_PRINT = "\033[49m";
+#else // Fallback for windows, since we had some weird issues there
+const string ICE_CELL_PRINT = " ";
+const string ROCK_CELL_PRINT = "#";
+const string FLAMINGO_CELL_PRINT = "*";
+const string FLAMINGO_ON_RESCUE_CELL_PRINT = "%";
+const string RESCUE_CELL_PRINT = "@";
+const string RESET_PRINT = "";
+#endif
 
 enum Action
 {
@@ -34,8 +45,7 @@ enum Action
 
 struct Puzzle
 {
-    // TODO: design your puzzle data structure
-    vector<vector<char>> board; // probably temporary
+    vector<vector<char>> board;
     int width;
     int height;
     int flamingo_x;
@@ -84,15 +94,10 @@ bool is_solvable (const Puzzle& puzzle)
     assert (true);
 /*  Postcondition: return value is true if the flamingo in `puzzle` is alive
 */
-    bool allowed = false; 
     for (vector<char> vec : puzzle.board) {
         for (char i : vec) {
-            if (i == 'F') {
-                return false;
-            }
-            else if (i == 'f') {
-                return true; 
-                //TODO: check for legal moves
+            if (i == 'F' || i == 'f') {
+                return true;
             }
         }
     }
@@ -100,7 +105,10 @@ bool is_solvable (const Puzzle& puzzle)
     return false;
 }
 
-void print_cell(ostream& os, char cell) {
+void print_cell(ostream& os, char cell) 
+{// Precondition:
+    assert(true);
+// Postcondition: the print cell corresponding to the cell has been outputted
     switch (cell) {
         case ICE_CELL:
             os << ICE_CELL_PRINT;
@@ -117,6 +125,9 @@ void print_cell(ostream& os, char cell) {
         case RESCUE_CELL:
             os << RESCUE_CELL_PRINT;
             break;
+        default:
+            os << '?';
+            break;
     }
 }
 
@@ -129,7 +140,7 @@ ostream& operator<< (ostream& os, const Puzzle& puzzle)
         for(char cell : row) {
             print_cell(os, cell);
         }
-        os << RESET_PRINT;
+        os << RESET_PRINT; // This resets the color on linux.
         os << endl;
     } 
  
@@ -140,6 +151,7 @@ bool load_puzzle (const vector<vector<char>>& field, Puzzle& puzzle)
 {// Precondition:
     assert (true);
 /*  Postcondition: return value is true if `field` denotes a valid puzzle, in which case `field` has been parsed into `puzzle`
+    If `field` is illegal, the program returns why (primarily used for debugging, but could be useful in final product for level designers)
 */
     int rowlength = ssize(field.at(0));
     int amount_of_flamingos = 0;
@@ -171,6 +183,7 @@ bool load_puzzle (const vector<vector<char>>& field, Puzzle& puzzle)
             }
             x++;
         }
+        x = 0;
         y++;
     }
     if (amount_of_flamingos != 1) {
@@ -238,9 +251,12 @@ bool open_puzzle (string file, Puzzle& puzzle)
 void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
 {// Precondition:
     assert(x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0);
+    cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
+    cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
     assert(x1 < puzzle.width && x2 < puzzle.width && y1 < puzzle.height && y2 < puzzle.height);
 /* Postcondition:
-    swaps the tiles at x1,y1 and x2,y2 */
+    Swaps the tiles at x1,y1 and x2,y2 on the board.
+*/
 
     swap(puzzle.board.at(y1).at(x1),puzzle.board.at(y2).at(x2));
 
@@ -248,15 +264,25 @@ void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
 
 void remove_flamingo(Puzzle& puzzle)
 {// Precondition:
-    assert(puzzle.flamingo_x == 0 || puzzle.flamingo_x == puzzle.width-1 || puzzle.flamingo_y == 0 || puzzle.flamingo_y == puzzle.height-1);
-    //assert(true);
+    //assert(puzzle.flamingo_x == 0 || puzzle.flamingo_x == puzzle.width-1 || puzzle.flamingo_y == 0 || puzzle.flamingo_y == puzzle.height-1);
+    // We decided on not using edge detection, because we also use it to delete the flamingo before finishing the level
+    assert(true);
 // Postcondition: the tile the flamingo is on has been replaced by an ice tile
     puzzle.board.at(puzzle.flamingo_y).at(puzzle.flamingo_x) = ICE_CELL;
 }
 
-bool move_flaming0_once(Puzzle& puzzle, Action action) 
+void move_flamingo_once(Puzzle& puzzle, Action action) 
 {// Precondition:
     assert(static_cast<int>(action) < 4);
+    // Makes sure the only allowed actions are those where the flamingo moves
+    // Also means the switch statement doesn't need a default, since all possibilities are covered
+
+/* Postcondition: the flamingo has moved once in the correct direction and
+    the tile it is moving to has been swapped with it (yes, this can swap anything, logic is implemented in move_flamingo).
+    If the flamingo would move over the edge, remove it instead (not really useful
+    since the logic for that is implemented in move_flamingo as well, but it's a good
+    safety mechanism to prevent errors)
+*/
 
     int flamx = puzzle.flamingo_x;
     int flamy = puzzle.flamingo_y;
@@ -265,7 +291,6 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
         case MoveEast:
             if (flamx == puzzle.width-1) {
                 remove_flamingo(puzzle);
-                return false;
             }
             else {
                 swap_coordinates(puzzle, flamx, flamy, flamx+1, flamy);
@@ -275,7 +300,6 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
         case MoveWest:
             if (flamx == 0) {
                 remove_flamingo(puzzle);
-                return false;
             }
             else {
                 swap_coordinates(puzzle, flamx, flamy, flamx-1, flamy);
@@ -285,7 +309,6 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
         case MoveSouth:
             if (flamy == puzzle.height-1) {
                 remove_flamingo(puzzle);
-                return false;
             }
             else {
                 swap_coordinates(puzzle, flamx, flamy, flamx, flamy+1);
@@ -295,23 +318,69 @@ bool move_flaming0_once(Puzzle& puzzle, Action action)
         case MoveNorth:
             if (flamy == 0) {
                 remove_flamingo(puzzle);
-                return false;
             }
             else {
                 swap_coordinates(puzzle, flamx, flamy, flamx, flamy-1);
-                puzzle.flamingo_x --;
+                puzzle.flamingo_y --;
             }
             break;
     }
-    return true;
 }
 
 void move_flamingo(Puzzle& puzzle, Action action)
 {// Precondition:
     assert(static_cast<int>(action) < 4);
+    //Makes sure the only available actions are the four moves
+    // Also means the switch statement doesn't need a default, since all possibilities are covered
 
+/* Postcondition:
+    The flamingo has moved in the direction specified by action until it hits a rock and stops,
+    hits the rescue tile and gets on it, removing the flamingo tile and converting the rescue tile,
+    or the flamingo goes off the edge, removing it.
+*/
+
+    int& flamx = puzzle.flamingo_x;
+    int& flamy = puzzle.flamingo_y;
+    int dirx, diry;
+    switch(action) {
+        case MoveEast:
+            dirx = 1;
+            diry = 0;
+            break;
+        case MoveWest:
+            dirx = -1;
+            diry = 0;
+            break;
+        case MoveSouth:
+            dirx = 0;
+            diry = 1;
+            break;
+        case MoveNorth:
+            dirx = 0;
+            diry = -1;
+            break;
+    }
+    while(flamx+dirx >= 0 && flamx+dirx < puzzle.width && flamy+diry >= 0 && flamy+diry < puzzle.height)
+    {
+        if (puzzle.board.at(flamy+diry).at(flamx+dirx) == ICE_CELL) {
+            move_flamingo_once(puzzle, action);
+        }
+        else if (puzzle.board.at(flamy+diry).at(flamx+dirx) == RESCUE_CELL) {
+            remove_flamingo(puzzle);
+            flamx += dirx;
+            flamy += diry;
+            puzzle.board.at(flamy).at(flamx) = FLAMINGO_ON_RESCUE_CELL;
+            return ;
+        }
+        else if (puzzle.board.at(flamy+diry).at(flamx+dirx) == ROCK_CELL) {
+            return ;
+        }
+    }
     
-
+    if (flamx+dirx < 0 || flamx + dirx >= puzzle.width || flamy+diry < 0 || flamy+diry >= puzzle.width) {
+        remove_flamingo(puzzle);
+    }
+    
 }
 
 Action get_action ()
@@ -350,14 +419,6 @@ int main ()
 */
     string file;
     Puzzle puzzle;
-    puzzle = {
-        {
-            {'.','.','.'},
-            {'f','F','x'},           
-            {'r','r','r'},
-        }
-    };
-    //ct << puzzle << endl;
     cout << "Enter file to open: ";
     getline(cin, file);
 
@@ -378,7 +439,8 @@ int main ()
             case MoveEast:
             case MoveSouth:
             case MoveWest:
-                
+                move_flamingo(puzzle, action);
+                // Logic for direction handling is implemented in move_flamingo
                 steps++;
                 break;
             case Reset:
