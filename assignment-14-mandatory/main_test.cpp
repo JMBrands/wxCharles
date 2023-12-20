@@ -73,6 +73,36 @@ const vector<vector<char>> CHALLENGE_4 = {
     {'.','r','.','.','.','.','.','.','.','.','.','.','.','.'}
 };
 
+TEST(load_queue, level1)
+{
+    vector<vector<Action>> expected;
+    expected.push_back({MoveNorth});
+    expected.push_back({MoveEast});
+    expected.push_back({MoveSouth});
+    expected.push_back({MoveWest});
+    
+    vector<vector<Action>> actual;
+    load_queue(actual, 1);
+    EXPECT_EQ(actual, expected);
+}
+
+TEST(load_queue, level2)
+{
+    vector<vector<Action>> expected;
+    expected.push_back({MoveNorth,MoveEast});
+    expected.push_back({MoveNorth,MoveWest});
+    expected.push_back({MoveEast,MoveNorth});
+    expected.push_back({MoveEast,MoveSouth});
+    expected.push_back({MoveSouth,MoveEast});
+    expected.push_back({MoveSouth,MoveWest});
+    expected.push_back({MoveWest,MoveNorth});
+    expected.push_back({MoveWest,MoveSouth});
+    
+    vector<vector<Action>> actual;
+    load_queue(actual, 2);
+    EXPECT_EQ(actual, expected);
+}
+
 TEST(bfs, bad_format1)
 {
     const int EXPECTED_STEPS = BAD_FORMAT;

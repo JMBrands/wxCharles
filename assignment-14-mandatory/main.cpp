@@ -447,6 +447,52 @@ vector<vector<char>> read_field (istream& is)
  * Breath first search
  */
 
+bool try_move(Puzzle& puzzle, Action direction)
+{// Precondition:
+    assert(static_cast<int>(direction) < 4);
+// Postcondition: Returns true if the move will not kill the flamingo.
+// Also sets puzzle to the new position. If the flamingo dies, return false and
+// keep puzzle the same as it was
+    Puzzle attempt = puzzle;
+    move_flamingo(attempt, direction);
+    if (is_solvable(attempt)) {
+        puzzle = attempt;
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+void load_queue(vector<vector<Action>>& queue, int level)
+{// Precondition:
+    assert(level > 0);
+    assert(level > 1 || ssize(queue) == 0); // Queue should be empty at level 1
+// Postcondition:
+// queue is filled with each possible permutation of north,south,east and west of length level
+    if (level > 1) {
+        vector<vector<Action>> basis;
+        load_queue(basis, level-1);
+        for (vector<Action> path : basis) {
+            for (int i = 0; i < 4; i ++) {
+                if (static_cast<int>(path.at(ssize(path)-1)) % 2 == i % 2) {
+                    continue;
+                    // Instantly prunes any path where the flamingo goes straight back or straight ahead
+                }
+                path.push_back(static_cast<Action>(i));
+                queue.push_back(path);
+                path.pop_back();
+            }
+        }
+    }
+    else {
+        for (int i = 0; i < 4; i ++) {
+            vector<Action> path = {static_cast<Action>(i)};
+            queue.push_back(path);
+        }
+    }
+}
+
 int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_path)
 {// Precondition:
     assert (true);
@@ -468,6 +514,14 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
                 path.push_back(C.at(i).candidate);
                 return path;
     */
+   Puzzle puzzle;
+   bool successfully_loaded = load_puzzle(field, puzzle);
+   if (!successfully_loaded) {
+        return BAD_FORMAT;
+   }
+   vector<vector<Action>> queue;
+   
+   
     return 0;
 }
 
@@ -475,6 +529,39 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
 /*
  * Depth first search
  */
+
+int smallest_index(const vector<int>& vec) {
+    int ind = 0;
+    for (int i = 0; i < ssize(vec); i++) {
+        if (vec.at(i) < vec.at(ind)) {
+            ind = i;
+        }
+    }
+    return ind;
+}
+
+int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, int& STATUS) {
+    assert(true);
+
+    if (depth == depth_limit) {
+        STATUS = NO_SOLUTION;
+    }
+    vector<Puzzle> directions = {puzzle, puzzle, puzzle, puzzle};
+    vector<bool> stati;
+    vector<int> depths;
+    for (int i = 0; i < 4; i++) {
+        stati.push_back(try_move(directions.at(i), static_cast<Action>(i)));
+    }
+    for (int i = 0; i < 4; i++) {
+        if (stati.at(i)) {
+            depths.push_back(dfs(directions.at(i), path, depth + 1, depth_limit, STATUS));
+        } else {
+            
+        }
+    }
+    int smol = smallest_index(depths);
+    
+}
 
 int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_path, int depth_limit)
 {// Precondition:
@@ -486,7 +573,11 @@ int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_pat
     // Remember to first validate and convert `field` into your own Puzzle data structure before starting your search.
     // You are encouraged to implement and use a recursive helper function to perform the actual depth first search, which given at least the initial Puzzle state and a depth limit produces a solution path.
     // That way you are free to choose your own parameters and their types.
-    return 0;
+    Puzzle puzzle;
+    if (!load_puzzle(field, puzzle))
+        return BAD_FORMAT;
+    int _success;
+    return dfs(puzzle, solution_path, 0, depth_limit, _success);
 }
 
 
