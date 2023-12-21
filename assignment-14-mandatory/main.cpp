@@ -256,8 +256,8 @@ bool open_puzzle (string file, Puzzle& puzzle)
 void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
 {// Precondition:
     assert(x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0);
-    cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
-    cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
+    //cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
+    //cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
     assert(x1 < puzzle.width && x2 < puzzle.width && y1 < puzzle.height && y2 < puzzle.height);
 /* Postcondition:
     Swaps the tiles at x1,y1 and x2,y2 on the board.
@@ -382,7 +382,7 @@ void move_flamingo(Puzzle& puzzle, Action action)
         }
     }
     
-    if (flamx+dirx < 0 || flamx + dirx >= puzzle.width || flamy+diry < 0 || flamy+diry >= puzzle.width) {
+    if (flamx+dirx < 0 || flamx + dirx >= puzzle.width || flamy+diry < 0 || flamy+diry >= puzzle.height) {
         remove_flamingo(puzzle);
     }
     
@@ -464,6 +464,35 @@ bool try_move(Puzzle& puzzle, Action direction)
     }
 }
 
+bool try_path(Puzzle& puzzle, vector<Action> path)
+{// Precondition:
+    for (Action i : path) assert(static_cast<int>(i) < 4);
+// Postcondition: Returns true if the flamingo lives after running the path.
+// Also sets puzzle to the new position. If the flamingo dies, return false
+
+    Puzzle attempt = puzzle;
+    for (Action move : path) {
+        bool success = try_move(attempt, move);
+        if (success == false) {
+            return false;
+        }
+    }
+    puzzle = attempt;
+    return true;
+}
+
+vector<Puzzle> play_out_path(Puzzle& puzzle, vector<Action> path)
+{// Precondition:
+    for (Action i : path) assert(static_cast<int>(i) < 4);
+// Postoncidion: returns each puzzle on the way
+    vector<Puzzle> steps = {puzzle};
+    for (Action move : path) {
+        move_flamingo(puzzle, move);
+        steps.push_back(puzzle);
+    }
+    return steps;
+}
+
 void load_queue(vector<vector<Action>>& queue, int level)
 {// Precondition:
     assert(level > 0);
@@ -493,6 +522,7 @@ void load_queue(vector<vector<Action>>& queue, int level)
     }
 }
 
+
 int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_path)
 {// Precondition:
     assert (true);
@@ -514,15 +544,44 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
                 path.push_back(C.at(i).candidate);
                 return path;
     */
-   Puzzle puzzle;
-   bool successfully_loaded = load_puzzle(field, puzzle);
-   if (!successfully_loaded) {
+    Puzzle puzzle;
+    bool successfully_loaded = load_puzzle(field, puzzle);
+    if (!successfully_loaded) {
         return BAD_FORMAT;
-   }
-   vector<vector<Action>> queue;
-   
-   
-    return 0;
+    }
+    if (is_solved(puzzle)) {
+        solution_path = {puzzle};
+        return 0;
+    }
+
+    vector<vector<Action>> queue;
+    vector<Puzzle> previous_positions;
+    int level = 1;
+    bool options_left = true;
+
+    while(options_left) {
+        options_left = false;
+        load_queue(queue, level);
+        for (vector<Action> current : queue) {
+            Puzzle attempt = puzzle;
+            bool success = try_path(attempt, current);
+            if (success == false) {
+                continue;
+            }
+            if (is_solved(attempt)) {
+                solution_path = play_out_path(puzzle, current);
+                cout << "Found a solution in " << level << " steps!" << endl;
+                for (Puzzle i : solution_path) {
+                    cout << i << endl;
+                }
+                return ssize(current);
+            }
+            options_left = true;
+        }
+        queue.clear();
+        level ++;
+    }
+    return NO_SOLUTION;
 }
 
 
