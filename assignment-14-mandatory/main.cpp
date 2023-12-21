@@ -256,8 +256,8 @@ bool open_puzzle (string file, Puzzle& puzzle)
 void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
 {// Precondition:
     assert(x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0);
-    cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
-    cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
+    // cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
+    // cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
     assert(x1 < puzzle.width && x2 < puzzle.width && y1 < puzzle.height && y2 < puzzle.height);
 /* Postcondition:
     Swaps the tiles at x1,y1 and x2,y2 on the board.
@@ -382,7 +382,7 @@ void move_flamingo(Puzzle& puzzle, Action action)
         }
     }
     
-    if (flamx+dirx < 0 || flamx + dirx >= puzzle.width || flamy+diry < 0 || flamy+diry >= puzzle.width) {
+    if (flamx+dirx < 0 || flamx + dirx >= puzzle.width || flamy+diry < 0 || flamy+diry >= puzzle.height) {
         remove_flamingo(puzzle);
     }
     
@@ -530,37 +530,68 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
  * Depth first search
  */
 
-int smallest_index(const vector<int>& vec) {
+int smallest_index_above_0(const vector<int>& vec) {
     int ind = 0;
     for (int i = 0; i < ssize(vec); i++) {
-        if (vec.at(i) < vec.at(ind)) {
+        if (vec.at(i) < vec.at(ind) && vec.at(i) > 0) {
             ind = i;
         }
     }
     return ind;
 }
 
-int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, int& STATUS) {
-    assert(true);
-
-    if (depth == depth_limit) {
-        STATUS = NO_SOLUTION;
+int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, bool first) {
+    assert(depth >= 0);
+    path.push_back(puzzle);
+    if (is_solved(puzzle)) {
+        return depth;
+    }
+    if (depth_limit != NO_DEPTH_LIMIT && depth > depth_limit) {
+        return NO_SOLUTION;
+    }
+    if (!is_solvable(puzzle)) {
+        return NO_SOLUTION;
     }
     vector<Puzzle> directions = {puzzle, puzzle, puzzle, puzzle};
     vector<bool> stati;
     vector<int> depths;
+    vector<Puzzle> nPath, ePath, sPath, wPath;
+    vector<vector<Puzzle>> paths = {nPath, ePath, sPath, wPath};
+    bool already_made = false;
     for (int i = 0; i < 4; i++) {
         stati.push_back(try_move(directions.at(i), static_cast<Action>(i)));
     }
     for (int i = 0; i < 4; i++) {
         if (stati.at(i)) {
-            depths.push_back(dfs(directions.at(i), path, depth + 1, depth_limit, STATUS));
+            already_made = false;
+            for (Puzzle comparison : path) {
+                if (comparison == directions.at(i)) {
+                    depths.push_back(NO_SOLUTION);
+                    already_made = true;
+                }
+            }
+            if (!already_made) {
+                cout << "Testing at depth " << depth+1 << endl;
+                depths.push_back(dfs(directions.at(i), paths.at(i), depth + 1, depth_limit, false));
+            }
         } else {
-            
+            depths.push_back(NO_SOLUTION);
         }
     }
-    int smol = smallest_index(depths);
-    
+    int smol = smallest_index_above_0(depths);
+
+    for (vector<Puzzle> pth : paths) {
+        for (Puzzle stage : pth) {
+            cout << stage << endl;
+        }
+        cout << endl;
+    }
+
+    for (Puzzle stage : paths.at(smol)) {
+        path.push_back(stage);
+    }
+
+    return depths.at(smol);
 }
 
 int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_path, int depth_limit)
@@ -576,8 +607,7 @@ int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_pat
     Puzzle puzzle;
     if (!load_puzzle(field, puzzle))
         return BAD_FORMAT;
-    int _success;
-    return dfs(puzzle, solution_path, 0, depth_limit, _success);
+    return dfs(puzzle, solution_path, 1, depth_limit, true);
 }
 
 
