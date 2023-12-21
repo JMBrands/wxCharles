@@ -555,14 +555,16 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
     }
 
     vector<vector<Action>> queue;
-    vector<Puzzle> previous_positions;
+    vector<Puzzle> previous_positions = {puzzle};
     int level = 1;
     bool options_left = true;
+    bool found_before = false;
 
     while(options_left) {
         options_left = false;
         load_queue(queue, level);
         for (vector<Action> current : queue) {
+            found_before = false;
             Puzzle attempt = puzzle;
             bool success = try_path(attempt, current);
             if (success == false) {
@@ -570,13 +572,19 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
             }
             if (is_solved(attempt)) {
                 solution_path = play_out_path(puzzle, current);
-                cout << "Found a solution in " << level << " steps!" << endl;
-                for (Puzzle i : solution_path) {
-                    cout << i << endl;
-                }
                 return ssize(current);
             }
-            options_left = true;
+            for (Puzzle comparison : previous_positions) {
+                if (comparison == attempt) {
+                    found_before = true;
+                    break;
+                }
+            }
+            if (!found_before) {
+                options_left = true;
+                previous_positions.push_back(attempt);
+            }
+            
         }
         queue.clear();
         level ++;
