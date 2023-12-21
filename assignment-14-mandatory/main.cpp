@@ -598,19 +598,29 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
  */
 
 int smallest_index_above_0(const vector<int>& vec) {
-    int ind = 0;
+    int ind = -1;
     for (int i = 0; i < ssize(vec); i++) {
-        if (vec.at(i) < vec.at(ind) && vec.at(i) > 0) {
+        cout << vec.at(i) << ",";
+        if (ind > 0) {
+            if (vec.at(i) < vec.at(ind) && vec.at(i) > 0) {
+                ind = i;
+            }
+        }
+        else if (vec.at(i) > 0) {
             ind = i;
         }
     }
+    cout << endl;
     return ind;
 }
 
-int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, bool first) {
+int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, bool first) 
+{ // Precondition:
     assert(depth >= 0);
+// Postcondition: returns the depth at which a solution is found. If there is one, 
     path.push_back(puzzle);
     if (is_solved(puzzle)) {
+        cout << "Solution found at depth " << depth << endl;
         return depth;
     }
     if (depth_limit != NO_DEPTH_LIMIT && depth > depth_limit) {
@@ -623,36 +633,39 @@ int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, 
     vector<bool> stati;
     vector<int> depths;
     vector<Puzzle> nPath, ePath, sPath, wPath;
-    vector<vector<Puzzle>> paths = {nPath, ePath, sPath, wPath};
-    bool already_made = false;
-    for (int i = 0; i < 4; i++) {
+    vector<vector<Puzzle>> paths(4, path);
+    /*for (int i = 0; i < 4; i++) {
         stati.push_back(try_move(directions.at(i), static_cast<Action>(i)));
-    }
+    }*/
     for (int i = 0; i < 4; i++) {
-        if (stati.at(i)) {
-            already_made = false;
+        Puzzle attempt = puzzle;
+        bool legal = try_move(attempt, static_cast<Action>(i));
+        if (legal) {
+            bool already_made = false;
             for (Puzzle comparison : path) {
-                if (comparison == directions.at(i)) {
+                if (comparison == attempt) {
                     depths.push_back(NO_SOLUTION);
                     already_made = true;
                 }
             }
             if (!already_made) {
                 cout << "Testing at depth " << depth+1 << endl;
-                depths.push_back(dfs(directions.at(i), paths.at(i), depth + 1, depth_limit, false));
+                //cout << "Size of path: " << ssize(path) << endl;
+                depths.push_back(dfs(attempt, paths.at(i), depth + 1, depth_limit, false));
             }
         } else {
             depths.push_back(NO_SOLUTION);
         }
     }
     int smol = smallest_index_above_0(depths);
+    cout << "Final solution at depth " << depths.at(smol) << endl;
 
-    for (vector<Puzzle> pth : paths) {
+    /*for (vector<Puzzle> pth : paths) {
         for (Puzzle stage : pth) {
-            cout << stage << endl;
+            //cout << stage << endl;
         }
         cout << endl;
-    }
+    }*/
 
     for (Puzzle stage : paths.at(smol)) {
         path.push_back(stage);
@@ -674,7 +687,7 @@ int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_pat
     Puzzle puzzle;
     if (!load_puzzle(field, puzzle))
         return BAD_FORMAT;
-    return dfs(puzzle, solution_path, 1, depth_limit, true);
+    return dfs(puzzle, solution_path, 0, depth_limit, true);
 }
 
 
