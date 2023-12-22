@@ -256,8 +256,6 @@ bool open_puzzle (string file, Puzzle& puzzle)
 void swap_coordinates(Puzzle& puzzle, int x1, int y1, int x2, int y2)
 {// Precondition:
     assert(x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0);
-    //cout << "width: " << puzzle.width << ", height: " << puzzle.height << endl;
-    //cout << "x1: " << x1 << ", x2:" << x2 << ", y1: " << y1 << ", y2: "<< y2 << endl;
     assert(x1 < puzzle.width && x2 < puzzle.width && y1 < puzzle.height && y2 < puzzle.height);
 /* Postcondition:
     Swaps the tiles at x1,y1 and x2,y2 on the board.
@@ -600,8 +598,7 @@ int breadth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_p
 int smallest_index_above_0(const vector<int>& vec) {
     int ind = -1;
     for (int i = 0; i < ssize(vec); i++) {
-        cout << vec.at(i) << ",";
-        if (ind > 0) {
+        if (ind > -1) {
             if (vec.at(i) < vec.at(ind) && vec.at(i) > 0) {
                 ind = i;
             }
@@ -610,7 +607,6 @@ int smallest_index_above_0(const vector<int>& vec) {
             ind = i;
         }
     }
-    cout << endl;
     return ind;
 }
 
@@ -618,59 +614,50 @@ int dfs(const Puzzle& puzzle, vector<Puzzle>& path, int depth, int depth_limit, 
 { // Precondition:
     assert(depth >= 0);
 // Postcondition: returns the depth at which a solution is found. If there is one, 
-    path.push_back(puzzle);
-    if (is_solved(puzzle)) {
-        cout << "Solution found at depth " << depth << endl;
-        return depth;
-    }
     if (depth_limit != NO_DEPTH_LIMIT && depth > depth_limit) {
         return NO_SOLUTION;
     }
     if (!is_solvable(puzzle)) {
+        cout << "Made an illegal move!" << endl;
         return NO_SOLUTION;
     }
+    path.push_back(puzzle);
+    if (is_solved(puzzle)) {
+        return depth;
+    }
     vector<Puzzle> directions = {puzzle, puzzle, puzzle, puzzle};
-    vector<bool> stati;
     vector<int> depths;
-    vector<Puzzle> nPath, ePath, sPath, wPath;
-    vector<vector<Puzzle>> paths(4, path);
-    /*for (int i = 0; i < 4; i++) {
-        stati.push_back(try_move(directions.at(i), static_cast<Action>(i)));
-    }*/
+    vector<vector<Puzzle>> paths = {path, path, path, path};
     for (int i = 0; i < 4; i++) {
         Puzzle attempt = puzzle;
         bool legal = try_move(attempt, static_cast<Action>(i));
         if (legal) {
             bool already_made = false;
-            for (Puzzle comparison : path) {
+            for (Puzzle comparison : paths.at(i)) {
                 if (comparison == attempt) {
                     depths.push_back(NO_SOLUTION);
                     already_made = true;
+                    break;
                 }
             }
             if (!already_made) {
-                cout << "Testing at depth " << depth+1 << endl;
-                //cout << "Size of path: " << ssize(path) << endl;
                 depths.push_back(dfs(attempt, paths.at(i), depth + 1, depth_limit, false));
             }
         } else {
             depths.push_back(NO_SOLUTION);
         }
     }
-    int smol = smallest_index_above_0(depths);
-    cout << "Final solution at depth " << depths.at(smol) << endl;
-
-    /*for (vector<Puzzle> pth : paths) {
-        for (Puzzle stage : pth) {
-            //cout << stage << endl;
+    if (first) {
+        for (vector<Puzzle> i : paths) {
+            cout << "Final path size: " << ssize(i) << endl;
         }
-        cout << endl;
-    }*/
-
-    for (Puzzle stage : paths.at(smol)) {
-        path.push_back(stage);
+    }
+    int smol = smallest_index_above_0(depths);
+    if (smol == -1) {
+        return NO_SOLUTION;
     }
 
+    path = paths.at(smol);
     return depths.at(smol);
 }
 
@@ -687,7 +674,12 @@ int depth_first (const vector<vector<char>>& field, vector<Puzzle>& solution_pat
     Puzzle puzzle;
     if (!load_puzzle(field, puzzle))
         return BAD_FORMAT;
-    return dfs(puzzle, solution_path, 0, depth_limit, true);
+    vector<Puzzle> temp_path;
+    int result = dfs(puzzle, temp_path, 0, depth_limit, true);
+    if (result != NO_SOLUTION) {
+        solution_path = temp_path;
+    }
+    return result;
 }
 
 
